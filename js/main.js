@@ -28,7 +28,7 @@ let door1;
 let door2;
 let advancedTexture;
 let level = 1;
-let enemy;
+let enemy = null;
 let bonus1;
 let bonus2;
 let bonus3; 
@@ -58,8 +58,9 @@ function startGame() {
                     finalScreen = false;
                     superball.move();
                     superball.jump();
+                    let enemyBox = scene.getMeshByName("enemyBox");
                     if (level == 2) {
-                        if ((superball.position.subtract(enemy.position)).length() < 50){ 
+                        if ((superball.position.subtract(enemyBox.position)).length() < 50){ 
                         enemy.move(scene);
                         }
                     }
@@ -153,8 +154,7 @@ function createButtonLetsPlay() {
         ground = createGround( 'images/hmap1.png', "images/sol/sol10.jpg", 50, scene);
         door1.position.y = 13;
         door2.position.y = 13;
-        enemy = new FollowEnemy(BABYLON.MeshBuilder.CreateBox("box", {height: 5, width:5, depth: 5}, scene),1,1,1,scene);
-
+        enemy = new FollowEnemy(BABYLON.MeshBuilder.CreateBox("enemyBox", {height: 5, width:5, depth: 5}, scene),1,1,1,scene);
     });
     advancedTexture.addControl(button2);
 
