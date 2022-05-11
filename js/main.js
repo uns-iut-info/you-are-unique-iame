@@ -5,6 +5,7 @@ let canvas;
 let engine;
 let scene;
 let superball;
+let ground;
 let otherBallsMesh;
 let villainBallsMesh;
 let remainingBalls = 20;
@@ -134,10 +135,10 @@ function createButtonLetsPlay() {
         button1.dispose();
         button2.dispose();
         button3.dispose();        
-        const gd = scene.getMeshByName("gdhm");
-        gd.material.diffuseTexture = new BABYLON.Texture("images/sol/sol10.jpg");
-        gd.material.diffuseTexture.uScale = 100;
-        gd.material.diffuseTexture.vScale = 100;
+        ground.dispose();
+        ground = createGround( 'images/hmap1.png', "images/sol/sol10.jpg", 50, scene);
+        door1.position.y = 13;
+        door2.position.y = 13;
     });
     advancedTexture.addControl(button2);
 
@@ -153,10 +154,10 @@ function createButtonLetsPlay() {
         button1.dispose();
         button2.dispose();
         button3.dispose();       
-        const gd = scene.getMeshByName("gdhm");
-        gd.material.diffuseTexture = new BABYLON.Texture("images/sol/sol9.jpg");
-        gd.material.diffuseTexture.uScale = 100;
-        gd.material.diffuseTexture.vScale = 100;
+        ground.dispose();
+        ground = createGround( 'images/hmap1.png', "images/sol/sol9.jpg", 10,  scene);
+        door1.position.y = 13;
+        door2.position.y = 13;
     });
     advancedTexture.addControl(button3);
     return button1;
@@ -268,7 +269,7 @@ function createScene() {
 
     createLights(scene);
     createSky(scene);
-    createGround(scene);
+    ground = createGround( 'images/hmap2.jpg',"images/sol/sol19.jpg", 50,  scene);
 
     //superball.physicsImpostor = new BABYLON.PhysicsImpostor(superball, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 1,move:true,friction:0.8, restitution: 0.2 }, scene);
     scene.ambientColor = new BABYLON.Color3(0.3, 0.3, 0.3);  
@@ -492,17 +493,17 @@ function displayLives(){
     advancedTexture.addControl(liveblock);
 }
 
-function createGround(scene) {
+function createGround(hmap, sol,maxH, scene) {
     console.log("create ground");
     let width = 600;
     let height = 600;
-    const groundOptions = { width:width, height:height, subdivisions:50, minHeight:0, maxHeight:50, onReady: onGroundCreated};
+    const groundOptions = { width:width, height:height, subdivisions:50, minHeight:0, maxHeight:maxH, onReady: onGroundCreated};
     //scene is optional and defaults to the current scene
-    const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("gdhm", 'images/hmap2.jpg', groundOptions, scene); 
+    const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("gdhm", hmap , groundOptions, scene); 
 
     function onGroundCreated() {
         const groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
-        groundMaterial.diffuseTexture = new BABYLON.Texture("images/sol/sol19.jpg");
+        groundMaterial.diffuseTexture = new BABYLON.Texture(sol);
         groundMaterial.diffuseTexture.uScale = 100;
         groundMaterial.diffuseTexture.vScale = 100;
         ground.material = groundMaterial;
