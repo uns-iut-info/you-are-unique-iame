@@ -1,7 +1,8 @@
 import Sphere from "./Sphere.js";
 import SuperBall from "./SuperBall.js";
-import FollowSphere from "./FollowSphere.js";
+import FollowEnemy from "./FollowEnemy.js";
 
+let spheresMesh;
 let canvas;
 let engine;
 let scene;
@@ -26,6 +27,7 @@ let door1;
 let door2;
 let advancedTexture;
 let level = 1;
+let enemy;
 
 
 window.onload = startGame();
@@ -52,7 +54,7 @@ function startGame() {
                     finalScreen = false;
                     superball.move();
                     superball.jump();
-                    //scene.render();
+                    enemy.move(scene);
                     if ((remainingBalls == 0)||(lifeHearts==0)) {
                         isPlaying = false;
                     }
@@ -137,6 +139,9 @@ function createButtonLetsPlay() {
         gd.material.diffuseTexture = new BABYLON.Texture("images/sol/sol10.jpg");
         gd.material.diffuseTexture.uScale = 100;
         gd.material.diffuseTexture.vScale = 100;
+        enemy = new FollowEnemy(BABYLON.MeshBuilder.CreateBox("box", {height: 50, width:50, depth: 50}, scene),1,1,1,scene);
+
+        
     });
     advancedTexture.addControl(button2);
 
@@ -769,12 +774,11 @@ function updatePosition(){
 }
 
 function createBalls(nbBall,scene){
-    let spheresMesh = [];
+    spheresMesh = [];
     let spheres = [];
     for(let i = 0; i < nbBall; i++) {
         spheresMesh[i] = BABYLON.MeshBuilder.CreateSphere("mySphere" +i, {diameter: 7, segments: 64}, scene);
         spheresMesh[i].physicsImpostor = new BABYLON.PhysicsImpostor(spheresMesh[i], BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.01, restitution: 0.2 }, scene);
-
         spheres[i] = new Sphere(spheresMesh[i],i,0.2,scene, "images/spheres/white.jpg");
     }
     otherBallsMesh = spheresMesh;
@@ -790,13 +794,9 @@ function createVillains(nbBall,scene, target){
         spheresMesh[i].physicsImpostor = new BABYLON.PhysicsImpostor(spheresMesh[i], BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.01, restitution: 0.2 }, scene);
         spheresMesh[i].touched = false;
 
-        switch(level) {
-            case 2 :
-                spheres[i] = new FollowSphere(spheresMesh[i],i,0.2,scene, "images/spheres/snow.jpg");
-                break;
-            default :
-                spheres[i] = new Sphere(spheresMesh[i],i,0.2,scene, "images/spheres/snow.jpg", target);
-        }
+        
+        //spheres[i] = new FollowSphere(spheresMesh[i],i,0.2,scene, "images/spheres/snow.jpg");
+        spheres[i] = new Sphere(spheresMesh[i],i,0.2,scene, "images/spheres/snow.jpg", target);
         spheresMesh[i].material.alpha = 1;
     }
     villainBallsMesh = spheresMesh;
