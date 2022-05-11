@@ -26,6 +26,9 @@ let door1;
 let door2;
 let advancedTexture;
 let level = 1;
+let bonus1;
+let bonus2;
+let bonus3; 
 
 
 window.onload = startGame();
@@ -120,6 +123,8 @@ function createButtonLetsPlay() {
         button1.dispose();
         button2.dispose();
         button3.dispose();
+        bonus2.dispose();
+        bonus3.dispose();
     });
     advancedTexture.addControl(button1);
 
@@ -134,7 +139,11 @@ function createButtonLetsPlay() {
         level = 2;
         button1.dispose();
         button2.dispose();
-        button3.dispose();        
+        button3.dispose();
+        bonus1.position.x = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+        bonus1.position.z = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+        bonus1.position.y = 4;
+        bonus3.dispose();        
         ground.dispose();
         ground = createGround( 'images/hmap1.png', "images/sol/sol10.jpg", 50, scene);
         door1.position.y = 13;
@@ -153,7 +162,10 @@ function createButtonLetsPlay() {
         level = 3;
         button1.dispose();
         button2.dispose();
-        button3.dispose();       
+        button3.dispose(); 
+        bonus1.position.x = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+        bonus1.position.z = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+        bonus1.position.y = 4;      
         ground.dispose();
         ground = createGround( 'images/hmap1.png', "images/sol/sol9.jpg", 10,  scene);
         door1.position.y = 13;
@@ -259,9 +271,9 @@ function createScene() {
     //music = new BABYLON.Sound("backgroundMusic", "sounds/sound1.mp3", scene, null, { loop: true, autoplay: true });
 
 
-
     displayLives();
     
+    createHeartBonus(scene);
     createTeleportation(scene);
 
     createBalls(remainingBalls,scene);
@@ -284,6 +296,36 @@ function createScene() {
     advancedTexture.addControl(textblock);
 
     return scene;
+}
+
+function createHeartBonus(scene){
+    bonus1 = new BABYLON.MeshBuilder.CreateCapsule("bonus1", {radius:0.5, height:10, radiusTop:4});
+    bonus2 = new BABYLON.MeshBuilder.CreateCapsule("bonus1", {radius:0.5, height:10, radiusTop:4});
+    bonus3 = new BABYLON.MeshBuilder.CreateCapsule("bonus1", {radius:0.5, height:10, radiusTop:4});
+
+    let bonusMaterial = new BABYLON.StandardMaterial("bonusMaterial" , scene);
+    bonusMaterial.diffuseColor = BABYLON.Color3.Red();  
+
+    bonus1.position.x = -147;
+    bonus1.position.z = -174;
+    bonus1.position.y = 19;
+    bonus1.material = bonusMaterial;
+
+    bonus2.position.x = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+    bonus2.position.z = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+    bonus2.position.y = 4;
+    bonus2.material = bonusMaterial;
+
+    bonus3.position.x = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+    bonus3.position.z = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+    bonus3.position.y = 4;
+    bonus3.material = bonusMaterial;
+
+    var hl = new BABYLON.HighlightLayer("hl1", scene);
+	hl.addMesh(bonus1, BABYLON.Color3.Red());
+	hl.addMesh(bonus2, BABYLON.Color3.Red());
+    hl.addMesh(bonus3, BABYLON.Color3.Red());
+
 }
 
 function createTeleportation(scene){
@@ -373,6 +415,8 @@ function loadSounds(scene) {
           }
         );
       };
+
+
 
     binaryTask = assetsManager.addBinaryFileTask(
         "enemy",
@@ -631,6 +675,7 @@ function createSuperBall(scene) {
     superballMesh.frontVector = new BABYLON.Vector3(0, 0, 1);
 
     superballMesh.move = () => {
+        //console.log(superballMesh.position.x, superballMesh.position.y, superballMesh.position.z );
 
         if(inputStates.up) {
             superballMesh.moveWithCollisions(superballMesh.frontVector.multiplyByFloats(superballMesh.speed, superballMesh.speed, superballMesh.speed));
@@ -863,7 +908,36 @@ function detectCollision(scene){
           
         }
     }
-       
+
+    /* DETECTION WITH A BONUS : */
+
+    if(player.intersectsMesh(bonus1)){
+        bonus1.dispose();
+        if(lifeHearts!=5){
+            lifeHearts++;
+            let string = "❤❤❤❤❤";
+            liveblock.text = string.substring(0,lifeHearts);
+        }
+    }
+
+    if(player.intersectsMesh(bonus2)){
+        bonus2.dispose();
+
+        if(lifeHearts!=5){
+            lifeHearts++;
+            let string = "❤❤❤❤❤";
+            liveblock.text = string.substring(0,lifeHearts);
+        }
+    }
+    
+    if(player.intersectsMesh(bonus3)){
+        bonus3.dispose();
+        if(lifeHearts!=5){
+            lifeHearts++;
+            let string = "❤❤❤❤❤";
+            liveblock.text = string.substring(0,lifeHearts);
+        }
+    }
 }
 
 
