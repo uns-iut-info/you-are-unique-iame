@@ -1,5 +1,6 @@
 import Sphere from "./Sphere.js";
 import SuperBall from "./SuperBall.js";
+import FollowSphere from "./FollowSphere.js";
 
 let canvas;
 let engine;
@@ -33,8 +34,6 @@ function startGame() {
     canvas = document.querySelector("#myCanvas");
     engine = new BABYLON.Engine(canvas, true);
     scene = createScene();
-
-
 
     // modify some default settings (i.e pointer events to prevent cursor to go 
     // out of the game window)
@@ -782,15 +781,22 @@ function createBalls(nbBall,scene){
     return spheres;
 }
 
-function createVillains(nbBall,scene){
+function createVillains(nbBall,scene, target){
     let spheresMesh = [];
     let spheres = [];
+    
     for(let i = 0; i < nbBall; i++) {
         spheresMesh[i] = BABYLON.MeshBuilder.CreateSphere("villain" +i, {diameter: 7, segments: 64}, scene);
         spheresMesh[i].physicsImpostor = new BABYLON.PhysicsImpostor(spheresMesh[i], BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.01, restitution: 0.2 }, scene);
         spheresMesh[i].touched = false;
 
-        spheres[i] = new Sphere(spheresMesh[i],i,0.2,scene, "images/spheres/snow.jpg");
+        switch(level) {
+            case 2 :
+                spheres[i] = new FollowSphere(spheresMesh[i],i,0.2,scene, "images/spheres/snow.jpg");
+                break;
+            default :
+                spheres[i] = new Sphere(spheresMesh[i],i,0.2,scene, "images/spheres/snow.jpg", target);
+        }
         spheresMesh[i].material.alpha = 1;
     }
     villainBallsMesh = spheresMesh;
