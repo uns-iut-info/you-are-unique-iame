@@ -58,7 +58,11 @@ function startGame() {
                     finalScreen = false;
                     superball.move();
                     superball.jump();
-                    enemy.move(scene);
+                    if (level == 2) {
+                        if ((superball.position.subtract(enemy.position)).length() < 50){ 
+                        enemy.move(scene);
+                        }
+                    }
                     if ((remainingBalls == 0)||(lifeHearts==0)) {
                         isPlaying = false;
                     }
@@ -149,7 +153,7 @@ function createButtonLetsPlay() {
         ground = createGround( 'images/hmap1.png', "images/sol/sol10.jpg", 50, scene);
         door1.position.y = 13;
         door2.position.y = 13;
-        enemy = new FollowEnemy(BABYLON.MeshBuilder.CreateBox("box", {height: 50, width:50, depth: 50}, scene),1,1,1,scene);
+        enemy = new FollowEnemy(BABYLON.MeshBuilder.CreateBox("box", {height: 5, width:5, depth: 5}, scene),1,1,1,scene);
 
     });
     advancedTexture.addControl(button2);

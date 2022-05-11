@@ -8,12 +8,17 @@ export default class FollowEnemy {
 
             this.enemyMesh.position.x = Math.floor(Math.random()*(300-(-300)+1)+(-300));
             this.enemyMesh.position.z = Math.floor(Math.random()*(300-(-300)+1)+(-300));
-            //this.enemyMesh.position.y = 50;
+            this.enemyMesh.position.y = 20;
 
             this.enemyMesh.checkCollisions = true;
             this.enemyMesh.BoxImpostor = new BABYLON.PhysicsImpostor( enemyMesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 10}, scene);
 
+            let enemyMaterial = new BABYLON.StandardMaterial("followinEnemyMaterial" , scene);
+
+            enemyMaterial.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random())
     
+            this.enemyMesh.material = enemyMaterial;
+
             if(speed)
                 this.speed = speed;
             else
@@ -25,7 +30,7 @@ export default class FollowEnemy {
             enemyMesh.FollowEnemy = this;
     
             // scaling
-            this.enemyMesh.scaling = new BABYLON.Vector3(0.2  , 0.2, 0.2);
+            //this.enemyMesh.scaling = new BABYLON.Vector3(0.2  , 0.2, 0.2);
     
             // FOR COLLISIONS, let's associate a BoundingBox to the FollowEnemy
     
@@ -59,7 +64,7 @@ export default class FollowEnemy {
     
             // let make the FollowEnemy move towards the superball
             // first let's move the bounding box mesh
-            if(distance > 30) {
+            if(distance > 10) {
                 //a.restart();   
                 // Move the bounding box instead of the FollowEnemy....
                 this.enemyMesh.moveWithCollisions(dir.multiplyByFloats(this.speed, this.speed, this.speed));
