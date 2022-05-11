@@ -7,6 +7,7 @@ let canvas;
 let engine;
 let scene;
 let superball;
+let ground;
 let otherBallsMesh;
 let villainBallsMesh;
 let remainingBalls = 20;
@@ -28,6 +29,9 @@ let door2;
 let advancedTexture;
 let level = 1;
 let enemy;
+let bonus1;
+let bonus2;
+let bonus3; 
 
 
 window.onload = startGame();
@@ -120,6 +124,8 @@ function createButtonLetsPlay() {
         button1.dispose();
         button2.dispose();
         button3.dispose();
+        bonus2.dispose();
+        bonus3.dispose();
     });
     advancedTexture.addControl(button1);
 
@@ -134,14 +140,17 @@ function createButtonLetsPlay() {
         level = 2;
         button1.dispose();
         button2.dispose();
-        button3.dispose();        
-        const gd = scene.getMeshByName("gdhm");
-        gd.material.diffuseTexture = new BABYLON.Texture("images/sol/sol10.jpg");
-        gd.material.diffuseTexture.uScale = 100;
-        gd.material.diffuseTexture.vScale = 100;
+        button3.dispose();
+        bonus1.position.x = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+        bonus1.position.z = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+        bonus1.position.y = 4;
+        bonus3.dispose();        
+        ground.dispose();
+        ground = createGround( 'images/hmap1.png', "images/sol/sol10.jpg", 50, scene);
+        door1.position.y = 13;
+        door2.position.y = 13;
         enemy = new FollowEnemy(BABYLON.MeshBuilder.CreateBox("box", {height: 50, width:50, depth: 50}, scene),1,1,1,scene);
 
-        
     });
     advancedTexture.addControl(button2);
 
@@ -156,11 +165,14 @@ function createButtonLetsPlay() {
         level = 3;
         button1.dispose();
         button2.dispose();
-        button3.dispose();       
-        const gd = scene.getMeshByName("gdhm");
-        gd.material.diffuseTexture = new BABYLON.Texture("images/sol/sol9.jpg");
-        gd.material.diffuseTexture.uScale = 100;
-        gd.material.diffuseTexture.vScale = 100;
+        button3.dispose(); 
+        bonus1.position.x = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+        bonus1.position.z = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+        bonus1.position.y = 4;      
+        ground.dispose();
+        ground = createGround( 'images/hmap1.png', "images/sol/sol9.jpg", 10,  scene);
+        door1.position.y = 13;
+        door2.position.y = 13;
     });
     advancedTexture.addControl(button3);
     return button1;
@@ -262,9 +274,9 @@ function createScene() {
     //music = new BABYLON.Sound("backgroundMusic", "sounds/sound1.mp3", scene, null, { loop: true, autoplay: true });
 
 
-
     displayLives();
     
+    createHeartBonus(scene);
     createTeleportation(scene);
 
     createBalls(remainingBalls,scene);
@@ -272,7 +284,7 @@ function createScene() {
 
     createLights(scene);
     createSky(scene);
-    createGround(scene);
+    ground = createGround( 'images/hmap2.jpg',"images/sol/sol19.jpg", 50,  scene);
 
     //superball.physicsImpostor = new BABYLON.PhysicsImpostor(superball, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 1,move:true,friction:0.8, restitution: 0.2 }, scene);
     scene.ambientColor = new BABYLON.Color3(0.3, 0.3, 0.3);  
@@ -287,6 +299,36 @@ function createScene() {
     advancedTexture.addControl(textblock);
 
     return scene;
+}
+
+function createHeartBonus(scene){
+    bonus1 = new BABYLON.MeshBuilder.CreateCapsule("bonus1", {radius:0.5, height:10, radiusTop:4});
+    bonus2 = new BABYLON.MeshBuilder.CreateCapsule("bonus1", {radius:0.5, height:10, radiusTop:4});
+    bonus3 = new BABYLON.MeshBuilder.CreateCapsule("bonus1", {radius:0.5, height:10, radiusTop:4});
+
+    let bonusMaterial = new BABYLON.StandardMaterial("bonusMaterial" , scene);
+    bonusMaterial.diffuseColor = BABYLON.Color3.Red();  
+
+    bonus1.position.x = -147;
+    bonus1.position.z = -174;
+    bonus1.position.y = 19;
+    bonus1.material = bonusMaterial;
+
+    bonus2.position.x = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+    bonus2.position.z = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+    bonus2.position.y = 4;
+    bonus2.material = bonusMaterial;
+
+    bonus3.position.x = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+    bonus3.position.z = Math.floor(Math.random()*(180-(-180)+1)+(-180));
+    bonus3.position.y = 4;
+    bonus3.material = bonusMaterial;
+
+    var hl = new BABYLON.HighlightLayer("hl1", scene);
+	hl.addMesh(bonus1, BABYLON.Color3.Red());
+	hl.addMesh(bonus2, BABYLON.Color3.Red());
+    hl.addMesh(bonus3, BABYLON.Color3.Red());
+
 }
 
 function createTeleportation(scene){
@@ -376,6 +418,8 @@ function loadSounds(scene) {
           }
         );
       };
+
+
 
     binaryTask = assetsManager.addBinaryFileTask(
         "enemy",
@@ -496,17 +540,17 @@ function displayLives(){
     advancedTexture.addControl(liveblock);
 }
 
-function createGround(scene) {
+function createGround(hmap, sol,maxH, scene) {
     console.log("create ground");
     let width = 600;
     let height = 600;
-    const groundOptions = { width:width, height:height, subdivisions:50, minHeight:0, maxHeight:50, onReady: onGroundCreated};
+    const groundOptions = { width:width, height:height, subdivisions:50, minHeight:0, maxHeight:maxH, onReady: onGroundCreated};
     //scene is optional and defaults to the current scene
-    const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("gdhm", 'images/hmap2.jpg', groundOptions, scene); 
+    const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("gdhm", hmap , groundOptions, scene); 
 
     function onGroundCreated() {
         const groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
-        groundMaterial.diffuseTexture = new BABYLON.Texture("images/sol/sol19.jpg");
+        groundMaterial.diffuseTexture = new BABYLON.Texture(sol);
         groundMaterial.diffuseTexture.uScale = 100;
         groundMaterial.diffuseTexture.vScale = 100;
         ground.material = groundMaterial;
@@ -634,6 +678,7 @@ function createSuperBall(scene) {
     superballMesh.frontVector = new BABYLON.Vector3(0, 0, 1);
 
     superballMesh.move = () => {
+        //console.log(superballMesh.position.x, superballMesh.position.y, superballMesh.position.z );
 
         if(inputStates.up) {
             superballMesh.moveWithCollisions(superballMesh.frontVector.multiplyByFloats(superballMesh.speed, superballMesh.speed, superballMesh.speed));
@@ -868,7 +913,36 @@ function detectCollision(scene){
           
         }
     }
-       
+
+    /* DETECTION WITH A BONUS : */
+
+    if(player.intersectsMesh(bonus1)){
+        bonus1.dispose();
+        if(lifeHearts!=5){
+            lifeHearts++;
+            let string = "❤❤❤❤❤";
+            liveblock.text = string.substring(0,lifeHearts);
+        }
+    }
+
+    if(player.intersectsMesh(bonus2)){
+        bonus2.dispose();
+
+        if(lifeHearts!=5){
+            lifeHearts++;
+            let string = "❤❤❤❤❤";
+            liveblock.text = string.substring(0,lifeHearts);
+        }
+    }
+    
+    if(player.intersectsMesh(bonus3)){
+        bonus3.dispose();
+        if(lifeHearts!=5){
+            lifeHearts++;
+            let string = "❤❤❤❤❤";
+            liveblock.text = string.substring(0,lifeHearts);
+        }
+    }
 }
 
 
