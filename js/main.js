@@ -879,6 +879,8 @@ function detectCollision(scene){
             scene.assets.eatBall.setPosition(player.position);
             scene.assets.eatBall.setVolume(0.6);
             scene.assets.eatBall.play();
+
+            player.scaling = new BABYLON.Vector3(player.scaling.x+0.05,player.scaling.y+0.05,player.scaling.z+0.05);
      
         }
     }
@@ -917,6 +919,25 @@ function detectCollision(scene){
           
         }
     }
+
+    /* DETECTION OF A FollowEnemy : */
+
+    let enemyBox = scene.getMeshByName("enemyBox")
+    if (player.intersectsMesh(enemyBox)) {
+        enemyBox.position.x = Math.floor(Math.random()*(300-(-300)+1)+(-300));
+        enemyBox.position.z = Math.floor(Math.random()*(300-(-300)+1)+(-300));
+        if (touchedBalls > 0) {
+        touchedBalls--;
+        remainingBalls++;
+        textblock.text = "Remaining balls : " + remainingBalls;
+
+        let newBall = BABYLON.MeshBuilder.CreateSphere("mySphere" +otherBallsMesh.length, {diameter: 7, segments: 64}, scene);
+        newBall.physicsImpostor = new BABYLON.PhysicsImpostor(newBall, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.01, restitution: 0.2 }, scene);
+        otherBallsMesh.push(new Sphere(newBall,otherBallsMesh.length,0.2,scene, "images/spheres/red.jpg"));
+        }
+    }
+
+
 
     /* DETECTION WITH A BONUS : */
 

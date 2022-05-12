@@ -15,9 +15,12 @@ export default class FollowEnemy {
 
             let enemyMaterial = new BABYLON.StandardMaterial("followinEnemyMaterial" , scene);
 
-            enemyMaterial.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random())
+            enemyMaterial.diffuseColor =  new BABYLON.Color3.Purple();
     
             this.enemyMesh.material = enemyMaterial;
+
+            var hl = new BABYLON.HighlightLayer("hl1", scene);
+            hl.addMesh(this.enemyMesh, new BABYLON.Color3.Purple());
 
             if(speed)
                 this.speed = speed;
