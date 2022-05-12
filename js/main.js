@@ -931,9 +931,10 @@ function detectCollision(scene){
         remainingBalls++;
         textblock.text = "Remaining balls : " + remainingBalls;
 
-        let newBall = BABYLON.MeshBuilder.CreateSphere("mySphere" +otherBallsMesh.length, {diameter: 7, segments: 64}, scene);
-        newBall.physicsImpostor = new BABYLON.PhysicsImpostor(newBall, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.01, restitution: 0.2 }, scene);
-        otherBallsMesh.push(new Sphere(newBall,otherBallsMesh.length,0.2,scene, "images/spheres/red.jpg"));
+        let newBallSphere = BABYLON.MeshBuilder.CreateSphere("mySphere" +otherBallsMesh.length, {diameter: 7, segments: 64}, scene);
+        newBallSphere.physicsImpostor = new BABYLON.PhysicsImpostor(newBallSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.01, restitution: 0.2 }, scene);
+        let newBall = new Sphere(newBallSphere,otherBallsMesh.length,0.2,scene, "images/spheres/white.jpg");
+        otherBallsMesh.push(newBallSphere);
         }
     }
 
