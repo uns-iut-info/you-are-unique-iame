@@ -59,6 +59,9 @@ function startGame() {
                     finalScreen = false;
                     superball.move();
                     superball.jump();
+                    if(level==3){
+                    superball.fireCannonBalls();
+                    }
                     /*
                     setTimeout(() => {
                         moveBalls();
@@ -241,7 +244,8 @@ function createButtonLetsPlay() {
             let villain =  villainBallsMesh[i];
             villain.dispose();
         }
-        ground = createGround( 'images/hmap1.png', "images/sol/sol9.jpg", 10,  scene);
+        //ground = createGround( 'images/hmap1.png', "images/sol/sol9.jpg", 10,  scene);
+        ground = createGround( 'images/hmap1.png', "images/sol/sol10.jpg", 50, scene);
         let finalBoss = BABYLON.MeshBuilder.CreateSphere("finalBoss", {diameter: 50, segments: 64}, scene);
         let finalBossMesh = new FinalBoss(finalBoss,100,10,scene, "images/spheres/snow.jpg");
         
@@ -858,6 +862,82 @@ function createSuperBall(scene) {
         //console.log("NOW2")
     }, 18000 * this.jumpAfter)
     }
+
+
+    superballMesh.canFireCannonBalls = true;
+    superballMesh.fireCannonBallsAfter = 0.1; // in seconds
+
+    superballMesh.fireCannonBalls = () => {
+        if(!inputStates.enter) return;
+
+        if(!superballMesh.canFireCannonBalls) return;
+
+        // ok, we fire, let's put the above property to false
+        superballMesh.canFireCannonBalls = false;
+
+        // let's be able to fire again after a while
+        
+        setTimeout(() => {
+            superballMesh.canFireCannonBalls = true;
+        }, 1000 * superballMesh.fireCannonBallsAfter);
+
+
+        let canonMaterial = new BABYLON.StandardMaterial("canonMaterial" , scene);
+        
+
+
+        canonMaterial.glossiness = 3;
+        canonMaterial.metallic = 5;
+        canonMaterial.roughness = 0.5;    
+        canonMaterial.specularPower = 8;
+        
+        canonMaterial.diffuseTexture = new BABYLON.Texture("images/spheres/marble.jpg", scene); 
+        canonMaterial.alpha = Math.random()*(1-0.7+1)+0.7; // niveau de transparence
+        
+        canonMaterial.emissiveColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+        canonMaterial.reflectivityColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+        canonMaterial.reflectionColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+        canonMaterial.albedoColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+
+        // Create a canonball
+        let cannonball = BABYLON.MeshBuilder.CreateSphere("cannonball", {diameter: 4, segments: 32}, scene);
+        cannonball.material = canonMaterial;
+
+        let pos = superballMesh.position;
+        // position the cannonball above the superballMesh
+        cannonball.position = new BABYLON.Vector3(pos.x, pos.y+1, pos.z);
+        // move cannonBall position from above the center of the superballMesh to above a bit further than the frontVector end (5 meter s further)
+        cannonball.position.addInPlace(superballMesh.frontVector.multiplyByFloats(5, 5, 5));
+
+        // add physics to the cannonball, mass must be non null to see gravity apply
+        cannonball.physicsImpostor = new BABYLON.PhysicsImpostor(cannonball,
+            BABYLON.PhysicsImpostor.SphereImpostor, { mass: 1 }, scene);    
+
+        // the cannonball needs to be fired, so we need an impulse !
+        // we apply it to the center of the sphere
+        let powerOfFire = 100;
+        let azimuth = 0.1; 
+        let aimForceVector = new BABYLON.Vector3(superballMesh.frontVector.x*powerOfFire, (superballMesh.frontVector.y+azimuth)*powerOfFire,superballMesh.frontVector.z*powerOfFire);
+        
+        cannonball.physicsImpostor.applyImpulse(aimForceVector,cannonball.getAbsolutePosition());
+
+        cannonball.actionManager = new BABYLON.ActionManager(scene);
+        let boss = scene.getMeshByName("finalBoss");
+
+        cannonball.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
+            {trigger : BABYLON.ActionManager.OnIntersectionEnterTrigger,
+            parameter : boss}, 
+                                            
+            () => {
+                //console.log("here");
+                cannonball.dispose(); 
+                boss.scaling = new BABYLON.Vector3(boss.scaling.x-0.02,boss.scaling.y-0.02,boss.scaling.z-0.02);
+
+            }
+        ));
+
+     }
+ 
  
     return superballMesh;
 }
@@ -903,7 +983,7 @@ function createBalls(nbBall,scene){
     for(let i = 0; i < nbBall; i++) {
         spheresMesh[i] = BABYLON.MeshBuilder.CreateSphere("mySphere" +i, {diameter: 7, segments: 64}, scene);
         spheresMesh[i].physicsImpostor = new BABYLON.PhysicsImpostor(spheresMesh[i], BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.01, restitution: 0.2 }, scene);
-        spheres[i] = new Sphere(spheresMesh[i],i,0.2,scene, "images/spheres/white.jpg");
+        spheres[i] = new Sphere(spheresMesh[i],i,0.2,scene, "images/spheres/marble.jpg");
     }
     otherBallsMesh = spheresMesh;
     return spheres;
@@ -1086,6 +1166,7 @@ function modifySettings() {
     inputStates.up = false;
     inputStates.down = false;
     inputStates.space = false;
+    inputStates.enter = false;
     
     //add the listener to the main, window object, and update the states
     window.addEventListener('keydown', (event) => {
@@ -1097,6 +1178,8 @@ function modifySettings() {
            inputStates.right = true;
         } else if ((event.key === "ArrowDown")|| (event.key === "s")|| (event.key === "S")) {
            inputStates.down = true;
+        } else if (event.key === "Enter") {
+            inputStates.enter = true;
         }  else if (event.key === " ") {
            inputStates.space = true;
         }
@@ -1112,6 +1195,8 @@ function modifySettings() {
            inputStates.right = false;
         } else if ((event.key === "ArrowDown")|| (event.key === "s")|| (event.key === "S")) {
            inputStates.down = false;
+        }  else if (event.key === "Enter") {
+            inputStates.enter = false;
         }  else if (event.key === " ") {
            inputStates.space = false;
         }
