@@ -1,6 +1,7 @@
 import Sphere from "./Sphere.js";
 import SuperBall from "./SuperBall.js";
 import FollowEnemy from "./FollowEnemy.js";
+import FinalBoss from "./FinalBoss.js";
 
 let spheresMesh;
 let canvas;
@@ -58,9 +59,10 @@ function startGame() {
                     finalScreen = false;
                     superball.move();
                     superball.jump();
+                    /*
                     setTimeout(() => {
                         moveBalls();
-                    }, 5000 );
+                    }, 5000 );*/
                     let enemyBox = scene.getMeshByName("enemyBox");
                     if (level == 2) {
                         if ((superball.position.subtract(enemyBox.position)).length() < 50){ 
@@ -70,6 +72,7 @@ function startGame() {
                     if ((remainingBalls == 0)||(lifeHearts==0)) {
                         isPlaying = false;
                     }
+
                 }
                 else {
                     if(finalScreen==false){
@@ -95,11 +98,54 @@ function moveBalls() {
 
     for (let i = 0; i < villainBallsMesh.length; i++) {
         let villain =  villainBallsMesh[i];
+
         let imposter = villain.physicsImpostor;
-        imposter.applyImpulse(
-            new BABYLON.Vector3(Math.random()*0.001, 0 ,  Math.random()*0.001),
-        villain.getAbsolutePosition()); 
+
+        if(rand()){
+            if(rand()){
+                imposter.applyImpulse(new BABYLON.Vector3(0.1, 0 , 0),villain.getAbsolutePosition()); 
+            }
+            else{
+                imposter.applyImpulse(new BABYLON.Vector3(-0.1, 0 , 0),villain.getAbsolutePosition()); 
+            }
+        }
+        else{
+            if(rand()){
+                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  0.1),villain.getAbsolutePosition()); 
+            }
+            else{
+                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  -0.1),villain.getAbsolutePosition()); 
+            }
+        }
     }
+
+    for (let i = 0; i < otherBallsMesh.length; i++) {
+        let ball =  otherBallsMesh[i];
+
+        let imposter = ball.physicsImpostor;
+
+        if(rand()){
+            if(rand()){
+                imposter.applyImpulse(new BABYLON.Vector3(0.1, 0 , 0),ball.getAbsolutePosition()); 
+            }
+            else{
+                imposter.applyImpulse(new BABYLON.Vector3(-0.1, 0 , 0),ball.getAbsolutePosition()); 
+            }
+        }
+        else{
+            if(rand()){
+                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  0.1),ball.getAbsolutePosition()); 
+            }
+            else{
+                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  -0.1),ball.getAbsolutePosition()); 
+            }
+        }
+    }
+}
+
+function rand(){
+    var r = Math.random();
+    return r>=0.5;
 }
 
 function erase() {
@@ -197,9 +243,7 @@ function createButtonLetsPlay() {
         }
         ground = createGround( 'images/hmap1.png', "images/sol/sol9.jpg", 10,  scene);
         let finalBoss = BABYLON.MeshBuilder.CreateSphere("finalBoss", {diameter: 50, segments: 64}, scene);
-        finalBoss.physicsImpostor = new BABYLON.PhysicsImpostor(finalBoss, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.01, restitution: 0.2 }, scene);
-        
-        let finalBossMesh = new Sphere(finalBoss,100,10,scene, "images/spheres/snow.jpg");
+        let finalBossMesh = new FinalBoss(finalBoss,100,10,scene, "images/spheres/snow.jpg");
         
         door1.position.y = 13;
         door2.position.y = 13;
@@ -274,6 +318,11 @@ function createTimer(i) { // i seconds
                 window.clearInterval(timer);
                 textBlock.dispose();
                 advancedTexture.dispose();
+            }
+            if(i%5==0){
+                if(level!=3){
+                moveBalls();
+                }
             }
         }
     }, 1000)
@@ -868,6 +917,8 @@ function createVillains(nbBall,scene, target){
         spheresMesh[i] = BABYLON.MeshBuilder.CreateSphere("villain" +i, {diameter: 7, segments: 64}, scene);
         spheresMesh[i].physicsImpostor = new BABYLON.PhysicsImpostor(spheresMesh[i], BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.01, restitution: 0.2 }, scene);
         spheresMesh[i].touched = false;
+        spheresMesh[i].frontVector = new BABYLON.Vector3(0, 0, 1);
+
 
         
         //spheres[i] = new FollowSphere(spheresMesh[i],i,0.2,scene, "images/spheres/snow.jpg");
