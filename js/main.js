@@ -58,6 +58,9 @@ function startGame() {
                     finalScreen = false;
                     superball.move();
                     superball.jump();
+                    setTimeout(() => {
+                        moveBalls();
+                    }, 5000 );
                     let enemyBox = scene.getMeshByName("enemyBox");
                     if (level == 2) {
                         if ((superball.position.subtract(enemyBox.position)).length() < 50){ 
@@ -86,6 +89,17 @@ function startGame() {
     scene.assetsManager.load();
 
     
+}
+
+function moveBalls() {
+
+    for (let i = 0; i < villainBallsMesh.length; i++) {
+        let villain =  villainBallsMesh[i];
+        let imposter = villain.physicsImpostor;
+        imposter.applyImpulse(
+            new BABYLON.Vector3(Math.random()*0.001, 0 ,  Math.random()*0.001),
+        villain.getAbsolutePosition()); 
+    }
 }
 
 function erase() {
@@ -174,7 +188,19 @@ function createButtonLetsPlay() {
         bonus1.position.z = Math.floor(Math.random()*(180-(-180)+1)+(-180));
         bonus1.position.y = 4;      
         ground.dispose();
+        for(let i = 0; i < otherBallsMesh.length ; i++){
+            let ball =  otherBallsMesh[i];
+            ball.dispose(); }
+        for (let i = 0; i < villainBallsMesh.length ; i++) {
+            let villain =  villainBallsMesh[i];
+            villain.dispose();
+        }
         ground = createGround( 'images/hmap1.png', "images/sol/sol9.jpg", 10,  scene);
+        let finalBoss = BABYLON.MeshBuilder.CreateSphere("finalBoss", {diameter: 50, segments: 64}, scene);
+        finalBoss.physicsImpostor = new BABYLON.PhysicsImpostor(finalBoss, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.01, restitution: 0.2 }, scene);
+        
+        let finalBossMesh = new Sphere(finalBoss,100,10,scene, "images/spheres/snow.jpg");
+        
         door1.position.y = 13;
         door2.position.y = 13;
     });
@@ -856,7 +882,7 @@ function detectCollision(scene){
     
     let player = scene.getMeshByName("heroSuperball");
 
-
+if (level != 3) {
     for(let i = 0; i < otherBallsMesh.length ; i++){
         let ball =  otherBallsMesh[i];
 
@@ -921,9 +947,9 @@ function detectCollision(scene){
     }
 
     /* DETECTION OF A FollowEnemy : */
-
+if (level == 2) {
     let enemyBox = scene.getMeshByName("enemyBox")
-    if (player.intersectsMesh(enemyBox)) {
+    if  (player.intersectsMesh(enemyBox)) {
         enemyBox.position.x = Math.floor(Math.random()*(300-(-300)+1)+(-300));
         enemyBox.position.z = Math.floor(Math.random()*(300-(-300)+1)+(-300));
         if (touchedBalls > 0) {
@@ -937,6 +963,9 @@ function detectCollision(scene){
         otherBallsMesh.push(newBallSphere);
         }
     }
+}
+
+}
 
 
 
