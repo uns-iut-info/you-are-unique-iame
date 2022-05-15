@@ -3,7 +3,7 @@
 
 Link to our game: https://iamegame.herokuapp.com/
 
-STORY : 
+## STORY : 
 "You live in the magnificent realm of Balland.
 Since childhood, you've always been laughed by the other ballizens !
 For you are a very special being.
@@ -14,7 +14,7 @@ Thanks to your special abilities, try to save the kidnapped ballizens and defeat
 Hurry ! Everyone's counting on you Superball !" 
 
 
-EXPLANATION :
+## EXPLANATION :
 The purpose of the game is to collect  in a limited amount of time. 
 (A user can set the amount of time as well as the number of balls he needs to save to win the game.)
 
@@ -31,5 +31,28 @@ LEVELS AND THEIR SPECIFICATIONS :
 - LEVEL 3 : it is the final stage. You will be fighting directly against the awful megaball ! You must throw at him as many balls as possible to exhaust him (by pressing enter). Beware, for each collision with megaball, you will lose a life point !
 - As you have a limited amount of time to finish the level, there are teleportation gates that will help you seek for balls in distress faster ! There are also bonuses that will give you a lifepoint when there is a collision with yout ball !
 
-
+## VIDEOS
+### EATING A BALL 
 ![gifMovingBall](https://user-images.githubusercontent.com/91093212/168486625-e11a1041-09d9-422d-b451-affe1f145ea1.gif)
+
+### COLLISION WITH AN ENNEMY
+![enemy](https://user-images.githubusercontent.com/91093212/168493807-8e199710-2c45-4146-b559-73164394857b.gif)
+
+### JUMPING
+![jump](https://user-images.githubusercontent.com/91093212/168493813-9da5d044-6f39-46f4-8fde-d68902271f8b.gif)
+
+### TELEPORTATION
+![teleportation](https://user-images.githubusercontent.com/91093212/168493818-ee7f558f-917a-4e56-b7b0-711cdc0de1d9.gif)
+
+### BONUS
+![bonus](https://user-images.githubusercontent.com/91093212/168493826-87e48ade-1ab3-46c9-b5f1-5dfed261f9ae.gif)
+
+### SQUARE ENEMY
+![square](https://user-images.githubusercontent.com/91093212/168493832-92ffd62d-62ea-420b-9afe-377e50a9765a.gif)
+
+### FINAL BOSS
+![finalBoss](https://user-images.githubusercontent.com/91093212/168493844-356f76d5-5abc-4a9d-8f53-78b3e1ed7553.gif)
+
+### SETTINGS
+![settings](https://user-images.githubusercontent.com/91093212/168493850-f0a51de3-95f3-4e6b-aa8e-486edd8fb7ae.gif)
+
