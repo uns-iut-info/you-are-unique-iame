@@ -382,7 +382,7 @@ function createButtonLetsPlay() {
         door1.position.y = 13;
         door2.position.y = 13;
 
-D
+
         var advancedTextureHealth = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("Health");
         textblockHealth = new BABYLON.GUI.TextBlock();   
         textblockHealth.text = "■■■■■■■■■■ 100 % "
@@ -1277,8 +1277,9 @@ if (level==3){
         let string = "❤❤❤❤❤";
         liveblock.text = string.substring(0,lifeHearts);
         bossTouched = true;
+        
         setTimeout(() => {
-            bossTouched = true;
+            bossTouched = false;
         }, 5000 );
         }
     }
@@ -1293,6 +1294,7 @@ if (level==3){
     if(player.intersectsMesh(bonus1)){
         bonus1.dispose();
         if(lifeHearts!=5){
+            console.log(lifeHearts);
             lifeHearts++;
             let string = "❤❤❤❤❤";
             liveblock.text = string.substring(0,lifeHearts);
@@ -1303,6 +1305,7 @@ if (level==3){
         bonus2.dispose();
 
         if(lifeHearts!=5){
+            console.log(lifeHearts);
             lifeHearts++;
             let string = "❤❤❤❤❤";
             liveblock.text = string.substring(0,lifeHearts);
@@ -1312,6 +1315,7 @@ if (level==3){
     if(player.intersectsMesh(bonus3)){
         bonus3.dispose();
         if(lifeHearts!=5){
+            console.log(lifeHearts);
             lifeHearts++;
             let string = "❤❤❤❤❤";
             liveblock.text = string.substring(0,lifeHearts);
