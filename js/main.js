@@ -463,7 +463,7 @@ function createButtonLetsPlay() {
             let villain =  villainBallsMesh[i];
             villain.dispose();
         }
-        ground = createGround( 'images/hmap1.png', "images/sol/sol3.jpg", 50, scene);
+        ground = createGround( 'images/hmap1.png', "images/sol/sol3.jpeg", 50, scene);
         let finalBoss = BABYLON.MeshBuilder.CreateSphere("finalBoss", {diameter: 50, segments: 64}, scene);
         let finalBossMesh = new FinalBoss(finalBoss,100,10,scene, "images/spheres/snow.jpg");
         healthPercentage = 100;
