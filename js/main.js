@@ -4,6 +4,7 @@ import FollowEnemy from "./FollowEnemy.js";
 import FinalBoss from "./FinalBoss.js";
 
 let spheresMesh;
+let helpButton;
 let button4;
 let canvas;
 let engine;
@@ -19,9 +20,6 @@ let inputStates = {};
 let bool = false;
 var textblock;
 let isPlaying = true;
-let startButton;
-let restartButton;
-let boolOnRestartButton = false;
 let lifeHearts = 5;
 let liveblock = new BABYLON.GUI.TextBlock();
 let screenWidth = window.screen.width;
@@ -220,6 +218,7 @@ function createLetsPlayButton() {
     button0.background = "pink";
     button0.onPointerUpObservable.add(function() {
         button0.dispose();
+        helpButton.dispose();
         bool = true;
         createTimer(time); 
     });
@@ -314,8 +313,46 @@ function createLetsPlayButton() {
  }
 
 
+function help() {
+
+    var buttonHelp = BABYLON.GUI.Button.CreateSimpleButton("helpButton", "?");
+    buttonHelp.width = "40px"
+    buttonHelp.height = "40px";
+    buttonHelp.left = "-600px";
+    buttonHelp.color = "white";
+    buttonHelp.cornerRadius = 20;
+    buttonHelp.background = "green";
+    buttonHelp.onPointerUpObservable.add(function() {
+
+        let advancedTextureHelp = textHelp();
+        advancedTextureHelp.onPointerDownObservable.add(function() {
+            advancedTextureHelp.dispose();
+            console.log("here");
+        })
+           
+    });
+    advancedTexture.addControl(buttonHelp);
+    return buttonHelp;
+ }
+function textHelp() {
+    var advancedTextureHelp = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("Help");
+    var textblockHelp = new BABYLON.GUI.TextBlock();   
+    textblockHelp.text = 
+    "KEYS :\n➡️ : moves the player to the right \n⬅️ : moves the player to the left \n⬇️ : moves the player backwards \n⬆️ : moves the player forward \n" +
+    "space : makes the player jump\n enter : makes the player shoot balls (only in level 3)" 
+    textblockHelp.fontSize = 37;
+    textblockHelp.top = 250 ;
+    textblockHelp.left = 0;
+    textblockHelp.color = "black";
+    advancedTextureHelp.addControl(textblockHelp);
+    return textblockHelp;
+}
+
 function START() {
     let start = startButtonCreate();
+    helpButton = help();
+
+    
 
 
     button4 = BABYLON.GUI.Button.CreateSimpleButton("but4", "settings");
@@ -373,7 +410,7 @@ function createButtonLetsPlay() {
         button2.dispose();
         button3.dispose();
         bonus2.dispose();
-        bonus3.dispose();        
+        bonus3.dispose();     
         createLetsPlayButton();
     });
     advancedTexture.addControl(button1);
