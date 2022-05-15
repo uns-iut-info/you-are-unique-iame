@@ -1,6 +1,7 @@
 import Sphere from "./Sphere.js";
 import SuperBall from "./SuperBall.js";
 import FollowEnemy from "./FollowEnemy.js";
+import FinalBoss from "./FinalBoss.js";
 
 let spheresMesh;
 let canvas;
@@ -58,9 +59,13 @@ function startGame() {
                     finalScreen = false;
                     superball.move();
                     superball.jump();
+                    if(level==3){
+                    superball.fireCannonBalls();
+                    }
+                    /*
                     setTimeout(() => {
                         moveBalls();
-                    }, 5000 );
+                    }, 5000 );*/
                     let enemyBox = scene.getMeshByName("enemyBox");
                     if (level == 2) {
                         if ((superball.position.subtract(enemyBox.position)).length() < 50){ 
@@ -70,6 +75,7 @@ function startGame() {
                     if ((remainingBalls == 0)||(lifeHearts==0)) {
                         isPlaying = false;
                     }
+
                 }
                 else {
                     if(finalScreen==false){
@@ -96,11 +102,54 @@ function moveBalls() {
 
     for (let i = 0; i < villainBallsMesh.length; i++) {
         let villain =  villainBallsMesh[i];
+
         let imposter = villain.physicsImpostor;
-        imposter.applyImpulse(
-            new BABYLON.Vector3(Math.random()*0.001, 0 ,  Math.random()*0.001),
-        villain.getAbsolutePosition()); 
+
+        if(rand()){
+            if(rand()){
+                imposter.applyImpulse(new BABYLON.Vector3(0.1, 0 , 0),villain.getAbsolutePosition()); 
+            }
+            else{
+                imposter.applyImpulse(new BABYLON.Vector3(-0.1, 0 , 0),villain.getAbsolutePosition()); 
+            }
+        }
+        else{
+            if(rand()){
+                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  0.1),villain.getAbsolutePosition()); 
+            }
+            else{
+                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  -0.1),villain.getAbsolutePosition()); 
+            }
+        }
     }
+
+    for (let i = 0; i < otherBallsMesh.length; i++) {
+        let ball =  otherBallsMesh[i];
+
+        let imposter = ball.physicsImpostor;
+
+        if(rand()){
+            if(rand()){
+                imposter.applyImpulse(new BABYLON.Vector3(0.1, 0 , 0),ball.getAbsolutePosition()); 
+            }
+            else{
+                imposter.applyImpulse(new BABYLON.Vector3(-0.1, 0 , 0),ball.getAbsolutePosition()); 
+            }
+        }
+        else{
+            if(rand()){
+                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  0.1),ball.getAbsolutePosition()); 
+            }
+            else{
+                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  -0.1),ball.getAbsolutePosition()); 
+            }
+        }
+    }
+}
+
+function rand(){
+    var r = Math.random();
+    return r>=0.5;
 }
 
 function erase() {
@@ -196,11 +245,10 @@ function createButtonLetsPlay() {
             let villain =  villainBallsMesh[i];
             villain.dispose();
         }
-        ground = createGround( 'images/hmap1.png', "images/sol/sol9.jpg", 10,  scene);
+        //ground = createGround( 'images/hmap1.png', "images/sol/sol9.jpg", 10,  scene);
+        ground = createGround( 'images/hmap1.png', "images/sol/sol10.jpg", 50, scene);
         let finalBoss = BABYLON.MeshBuilder.CreateSphere("finalBoss", {diameter: 50, segments: 64}, scene);
-        finalBoss.physicsImpostor = new BABYLON.PhysicsImpostor(finalBoss, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.01, restitution: 0.2 }, scene);
-        
-        let finalBossMesh = new Sphere(finalBoss,100,10,scene, "images/spheres/snow.jpg");
+        let finalBossMesh = new FinalBoss(finalBoss,100,10,scene, "images/spheres/snow.jpg");
         
         door1.position.y = 13;
         door2.position.y = 13;
@@ -275,6 +323,11 @@ function createTimer(i) { // i seconds
                 window.clearInterval(timer);
                 textBlock.dispose();
                 advancedTexture.dispose();
+            }
+            if(i%5==0){
+                if(level!=3){
+                moveBalls();
+                }
             }
         }
     }, 1000)
@@ -810,6 +863,82 @@ function createSuperBall(scene) {
         //console.log("NOW2")
     }, 18000 * this.jumpAfter)
     }
+
+
+    superballMesh.canFireCannonBalls = true;
+    superballMesh.fireCannonBallsAfter = 0.1; // in seconds
+
+    superballMesh.fireCannonBalls = () => {
+        if(!inputStates.enter) return;
+
+        if(!superballMesh.canFireCannonBalls) return;
+
+        // ok, we fire, let's put the above property to false
+        superballMesh.canFireCannonBalls = false;
+
+        // let's be able to fire again after a while
+        
+        setTimeout(() => {
+            superballMesh.canFireCannonBalls = true;
+        }, 1000 * superballMesh.fireCannonBallsAfter);
+
+
+        let canonMaterial = new BABYLON.StandardMaterial("canonMaterial" , scene);
+        
+
+
+        canonMaterial.glossiness = 3;
+        canonMaterial.metallic = 5;
+        canonMaterial.roughness = 0.5;    
+        canonMaterial.specularPower = 8;
+        
+        canonMaterial.diffuseTexture = new BABYLON.Texture("images/spheres/marble.jpg", scene); 
+        canonMaterial.alpha = Math.random()*(1-0.7+1)+0.7; // niveau de transparence
+        
+        canonMaterial.emissiveColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+        canonMaterial.reflectivityColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+        canonMaterial.reflectionColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+        canonMaterial.albedoColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+
+        // Create a canonball
+        let cannonball = BABYLON.MeshBuilder.CreateSphere("cannonball", {diameter: 4, segments: 32}, scene);
+        cannonball.material = canonMaterial;
+
+        let pos = superballMesh.position;
+        // position the cannonball above the superballMesh
+        cannonball.position = new BABYLON.Vector3(pos.x, pos.y+1, pos.z);
+        // move cannonBall position from above the center of the superballMesh to above a bit further than the frontVector end (5 meter s further)
+        cannonball.position.addInPlace(superballMesh.frontVector.multiplyByFloats(5, 5, 5));
+
+        // add physics to the cannonball, mass must be non null to see gravity apply
+        cannonball.physicsImpostor = new BABYLON.PhysicsImpostor(cannonball,
+            BABYLON.PhysicsImpostor.SphereImpostor, { mass: 1 }, scene);    
+
+        // the cannonball needs to be fired, so we need an impulse !
+        // we apply it to the center of the sphere
+        let powerOfFire = 100;
+        let azimuth = 0.1; 
+        let aimForceVector = new BABYLON.Vector3(superballMesh.frontVector.x*powerOfFire, (superballMesh.frontVector.y+azimuth)*powerOfFire,superballMesh.frontVector.z*powerOfFire);
+        
+        cannonball.physicsImpostor.applyImpulse(aimForceVector,cannonball.getAbsolutePosition());
+
+        cannonball.actionManager = new BABYLON.ActionManager(scene);
+        let boss = scene.getMeshByName("finalBoss");
+
+        cannonball.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
+            {trigger : BABYLON.ActionManager.OnIntersectionEnterTrigger,
+            parameter : boss}, 
+                                            
+            () => {
+                //console.log("here");
+                cannonball.dispose(); 
+                boss.scaling = new BABYLON.Vector3(boss.scaling.x-0.02,boss.scaling.y-0.02,boss.scaling.z-0.02);
+
+            }
+        ));
+
+     }
+ 
  
     return superballMesh;
 }
@@ -855,7 +984,7 @@ function createBalls(nbBall,scene){
     for(let i = 0; i < nbBall; i++) {
         spheresMesh[i] = BABYLON.MeshBuilder.CreateSphere("mySphere" +i, {diameter: 7, segments: 64}, scene);
         spheresMesh[i].physicsImpostor = new BABYLON.PhysicsImpostor(spheresMesh[i], BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.01, restitution: 0.2 }, scene);
-        spheres[i] = new Sphere(spheresMesh[i],i,0.2,scene, "images/spheres/white.jpg");
+        spheres[i] = new Sphere(spheresMesh[i],i,0.2,scene, "images/spheres/marble.jpg");
     }
     otherBallsMesh = spheresMesh;
     return spheres;
@@ -869,6 +998,8 @@ function createVillains(nbBall,scene, target){
         spheresMesh[i] = BABYLON.MeshBuilder.CreateSphere("villain" +i, {diameter: 7, segments: 64}, scene);
         spheresMesh[i].physicsImpostor = new BABYLON.PhysicsImpostor(spheresMesh[i], BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.01, restitution: 0.2 }, scene);
         spheresMesh[i].touched = false;
+        spheresMesh[i].frontVector = new BABYLON.Vector3(0, 0, 1);
+
 
         
         //spheres[i] = new FollowSphere(spheresMesh[i],i,0.2,scene, "images/spheres/snow.jpg");
@@ -1036,6 +1167,7 @@ function modifySettings() {
     inputStates.up = false;
     inputStates.down = false;
     inputStates.space = false;
+    inputStates.enter = false;
     
     //add the listener to the main, window object, and update the states
     window.addEventListener('keydown', (event) => {
@@ -1047,6 +1179,8 @@ function modifySettings() {
            inputStates.right = true;
         } else if ((event.key === "ArrowDown")|| (event.key === "s")|| (event.key === "S")) {
            inputStates.down = true;
+        } else if (event.key === "Enter") {
+            inputStates.enter = true;
         }  else if (event.key === " ") {
            inputStates.space = true;
         }
@@ -1062,6 +1196,8 @@ function modifySettings() {
            inputStates.right = false;
         } else if ((event.key === "ArrowDown")|| (event.key === "s")|| (event.key === "S")) {
            inputStates.down = false;
+        }  else if (event.key === "Enter") {
+            inputStates.enter = false;
         }  else if (event.key === " ") {
            inputStates.space = false;
         }
