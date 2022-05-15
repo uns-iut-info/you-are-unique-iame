@@ -4,6 +4,7 @@ import FollowEnemy from "./FollowEnemy.js";
 import FinalBoss from "./FinalBoss.js";
 
 let spheresMesh;
+let button4;
 let canvas;
 let engine;
 let scene;
@@ -259,6 +260,7 @@ function createLetsPlayButton() {
     buttonStart.background = "pink";
     buttonStart.onPointerUpObservable.add(function() {
         buttonStart.dispose();
+        button4.dispose();
         createButtonLetsPlay()    
     });
     advancedTexture.addControl(buttonStart);
@@ -269,7 +271,7 @@ function START() {
     let start = startButtonCreate();
 
 
-    var button4 = BABYLON.GUI.Button.CreateSimpleButton("but4", "settings");
+    button4 = BABYLON.GUI.Button.CreateSimpleButton("but4", "settings");
     button4.width = "150px"
     button4.height = "40px";
     button4.left = "400px";
@@ -382,7 +384,6 @@ function createButtonLetsPlay() {
         door1.position.y = 13;
         door2.position.y = 13;
 
-D
         var advancedTextureHealth = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("Health");
         textblockHealth = new BABYLON.GUI.TextBlock();   
         textblockHealth.text = "■■■■■■■■■■ 100 % "
