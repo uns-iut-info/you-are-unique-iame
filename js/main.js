@@ -427,7 +427,7 @@ function createButtonLetsPlay() {
         bonus1.position.y = 4;
         bonus3.dispose();        
         ground.dispose();
-        ground = createGround( 'images/hmap1.png', "images/sol/sol10.jpg", 50, scene);
+        ground = createGround( 'images/hmap1.png', "images/sol/sol2.jpg", 50, scene);
         door1.position.y = 13;
         door2.position.y = 13;
         enemy = new FollowEnemy(BABYLON.MeshBuilder.CreateBox("enemyBox", {height: 5, width:5, depth: 5}, scene),1,1,1,scene);
@@ -463,8 +463,7 @@ function createButtonLetsPlay() {
             let villain =  villainBallsMesh[i];
             villain.dispose();
         }
-        //ground = createGround( 'images/hmap1.png', "images/sol/sol9.jpg", 10,  scene);
-        ground = createGround( 'images/hmap1.png', "images/sol/sol10.jpg", 50, scene);
+        ground = createGround( 'images/hmap1.png', "images/sol/sol3.jpg", 50, scene);
         let finalBoss = BABYLON.MeshBuilder.CreateSphere("finalBoss", {diameter: 50, segments: 64}, scene);
         let finalBossMesh = new FinalBoss(finalBoss,100,10,scene, "images/spheres/snow.jpg");
         healthPercentage = 100;
@@ -613,7 +612,7 @@ function createScene() {
 
     createLights(scene);
     createSky(scene);
-    ground = createGround( 'images/hmap2.jpg',"images/sol/sol19.jpg", 50,  scene);
+    ground = createGround( 'images/hmap2.jpg',"images/sol/sol1.jpg", 50,  scene);
 
     scene.ambientColor = new BABYLON.Color3(0.3, 0.3, 0.3);  
     
