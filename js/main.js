@@ -5,6 +5,7 @@ import FinalBoss from "./FinalBoss.js";
 
 let spheresMesh;
 let helpButton;
+let storyButton;
 let button4;
 let canvas;
 let engine;
@@ -220,6 +221,7 @@ function createLetsPlayButton() {
     button0.onPointerUpObservable.add(function() {
         button0.dispose();
         helpButton.dispose();
+        storyButton.dispose();
         bool = true;
         createTimer(time); 
     });
@@ -328,13 +330,14 @@ function help() {
     advancedTexture.addControl(buttonHelp);
     return buttonHelp;
  }
+
 function textHelp() {
     var advancedTextureHelp = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("Help");
     var textblockHelp = new BABYLON.GUI.TextBlock();   
     textblockHelp.text = 
     "KEYS :\n➡️ : moves the player to the right \n⬅️ : moves the player to the left \n⬇️ : moves the player backwards \n⬆️ : moves the player forward \n" +
     "space : makes the player jump\n enter : makes the player shoot balls (only in level 3)" 
-    textblockHelp.fontSize = 17;
+    textblockHelp.fontSize = 22;
     textblockHelp.top = 230 ;
     textblockHelp.left = 0;
     textblockHelp.color = "black";
@@ -342,19 +345,58 @@ function textHelp() {
     return textblockHelp;
 }
 
+
+function story() {
+
+    var buttonStory = BABYLON.GUI.Button.CreateSimpleButton("StoryButton", "STORYTIME");
+    buttonStory.width = "150px"
+    buttonStory.height = "40px";
+    buttonStory.left = "0px";
+    buttonStory.top = "-200px";
+
+    buttonStory.color = "white";
+    buttonStory.cornerRadius = 20;
+    buttonStory.background = "orange";
+    buttonStory.onPointerUpObservable.add(function() {
+
+        let advancedTextureStory = textStory();
+        advancedTextureStory.onPointerDownObservable.add(function() {
+            advancedTextureStory.dispose();
+        })
+    });
+    advancedTexture.addControl(buttonStory);
+    return buttonStory;
+ }
+
+function textStory() {
+    var advancedTextureStory = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("Story");
+    var textblockStory = new BABYLON.GUI.TextBlock();   
+    textblockStory.text = "You live in the magnificent realm of Balland.\nSince childhood, you've always been laughed by the other ballizens !\nFor you are a very special being.\nContrary to your peers, you were born different. Unique.\nFor an unknow reason, some strange particles are emitted by your body and have been given you special abilities.\nYou used to be ashamed of your difference. But that was before. Before Megaball invided CityBall!\n Thanks to your special abilities, try to save the kidnapped ballizens and defeat the awful Megaball !\n Hurry ! Everyone's counting on you Superball !" 
+    textblockStory.fontSize = 22;
+    textblockStory.top = 230 ;
+    textblockStory.left = 0;
+    textblockStory.color = "black";
+    advancedTextureStory.addControl(textblockStory);
+    return textblockStory;
+}
+
+
+
+
+
+
 function START() {
     let start = startButtonCreate();
     helpButton = help();
+    storyButton = story();
 
-    
 
-
-    button4 = BABYLON.GUI.Button.CreateSimpleButton("but4", "settings");
+    button4 = BABYLON.GUI.Button.CreateSimpleButton("but4", "SETTINGS");
     button4.width = "150px"
     button4.height = "40px";
     button4.left = "400px";
     button4.color = "white";
-    button4.cornerRadius = 20;
+    button4.cornerRadius = 22;
     button4.background = "red";
     button4.onPointerUpObservable.add(function() 
     { 
