@@ -33,6 +33,10 @@ let enemy = null;
 let bonus1;
 let bonus2;
 let bonus3; 
+let healthPercentage;
+let counterBoss;
+var textblockHealth;
+var bossTouched = false;
 
 
 window.onload = startGame();
@@ -221,7 +225,7 @@ function createButtonLetsPlay() {
     });
     advancedTexture.addControl(button2);
 
-    var button3 = BABYLON.GUI.Button.CreateSimpleButton("but3", "level 3");
+   var button3 = BABYLON.GUI.Button.CreateSimpleButton("but3", "level 3");
     button3.width = "150px"
     button3.height = "40px";
     button3.left = "200px";
@@ -248,13 +252,28 @@ function createButtonLetsPlay() {
         ground = createGround( 'images/hmap1.png', "images/sol/sol10.jpg", 50, scene);
         let finalBoss = BABYLON.MeshBuilder.CreateSphere("finalBoss", {diameter: 50, segments: 64}, scene);
         let finalBossMesh = new FinalBoss(finalBoss,100,10,scene, "images/spheres/snow.jpg");
-        
+        healthPercentage = 100;
+        counterBoss = 0;
         door1.position.y = 13;
         door2.position.y = 13;
+
+        var advancedTextureHealth = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("Health");
+        textblockHealth = new BABYLON.GUI.TextBlock();   
+        textblockHealth.text = "■■■■■■■■■■ 100 % "
+        textblockHealth.fontSize = 37;
+        textblockHealth.top = (screenHeight * 250)/720;
+        textblockHealth.left = 0;
+        textblockHealth.color = "green";
+        advancedTextureHealth.addControl(textblockHealth);
+
+
+
     });
     advancedTexture.addControl(button3);
     return button1;
 }
+
+
 
 function WinOrLose() {
     const nb = otherBallsMesh.length;
@@ -924,15 +943,36 @@ function createSuperBall(scene) {
         cannonball.actionManager = new BABYLON.ActionManager(scene);
         let boss = scene.getMeshByName("finalBoss");
 
+
+
         cannonball.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
             {trigger : BABYLON.ActionManager.OnIntersectionEnterTrigger,
             parameter : boss}, 
                                             
             () => {
-                //console.log("here");
                 cannonball.dispose(); 
-                boss.scaling = new BABYLON.Vector3(boss.scaling.x-0.02,boss.scaling.y-0.02,boss.scaling.z-0.02);
-
+                //console.log("here");
+                counterBoss++; 
+                if(counterBoss%10==0){ // update of the health bar
+                    healthPercentage = healthPercentage - 10;
+                    let string = "■■■■■■■■■■";
+                    textblockHealth.text = string.substring(0,healthPercentage/10) + " " + healthPercentage + "%";
+                    if(healthPercentage<=70 && healthPercentage>=40){
+                        textblockHealth.color = "orange";
+                    }
+                    if(healthPercentage<40){
+                        textblockHealth.color = "red";
+                    }
+                }
+               
+                if(healthPercentage==0){ // the player wins
+                    boss.material = cannonball.material;
+                    remainingBalls = 0;
+                }
+                else{
+                    boss.material = cannonball.material;
+                    boss.material.diffuseTexture = new BABYLON.Texture("images/spheres/snow.jpg", scene); 
+                }
             }
         ));
 
@@ -1095,6 +1135,24 @@ if (level == 2) {
         }
     }
 }
+
+}
+
+if (level==3){
+    let boss = scene.getMeshByName("finalBoss");
+    if(player.intersectsMesh(boss)){
+        if(!bossTouched){
+    
+        lifeHearts--;
+        let string = "❤❤❤❤❤";
+        liveblock.text = string.substring(0,lifeHearts);
+        bossTouched = true;
+        setTimeout(() => {
+            bossTouched = true;
+        }, 5000 );
+        }
+    }
+
 
 }
 
