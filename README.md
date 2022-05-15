@@ -25,7 +25,7 @@ The dark balls are underlings sent by Megaball to stop you ! Beware of them !
 
 You can replay as much as you want to !
 
-LEVELS AND THEIR SPECIFICATIONS :
+## LEVELS AND THEIR SPECIFICATIONS :
 - LEVEL 1 : it is an easy level. By pressing space, the ball can jump. The enemies are moving randomly and if you touch one them you will lose a life point !
 - LEVEL 2 :  it is a more difficult level in which a special enemy appears, a mystery box that will try to follow you if you stand too close to it! It will make you lose 2 balls that you already saved (you will need to save this ball again). After colliding with you, this box wil teleport itself somewhere else in the world. 
 - LEVEL 3 : it is the final stage. You will be fighting directly against the awful megaball ! You must throw at him as many balls as possible to exhaust him (by pressing enter). Beware, for each collision with megaball, you will lose a life point !
