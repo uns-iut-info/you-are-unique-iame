@@ -13,7 +13,10 @@ export default class sphereMesh extends Sphere {
 
     }
 
-    updateParticles(){
+    /**
+     *  Updates the postion of the particles of the superball
+     */
+    updateParticles(){ 
             // Create a particle system
             var particleSystem = new BABYLON.ParticleSystem("particles", 2000, this.scene);
     

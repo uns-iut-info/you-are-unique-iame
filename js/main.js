@@ -229,7 +229,10 @@ function createLetsPlayButton() {
  }
 
 
-
+/**
+ *  Function to get an input for the number of balls
+ * 
+ */
  
  function createinputRemainingBallsButton() {
     
@@ -256,6 +259,11 @@ function createLetsPlayButton() {
 
  }
 
+ /**
+ *  Function to get an input for the time counter
+ * 
+ */
+ 
  function createinputTimeButton() {
     
     var inputNumber = new BABYLON.GUI.InputText("inputTime");
@@ -265,14 +273,8 @@ function createLetsPlayButton() {
     inputNumber.left = "200px";
 
 
-    //inputNumber.width = 0.2;
-    //inputNumber.maxWidth = 0.3;
-    //inputNumber.left = "-37.5%";
-    //inputNumber.top = "-44%";
-    //inputNumber.height = "40px";
     inputNumber.text = "Set Timer in sec";
     inputNumber.color = "#0095B3";
-    // inputNumber.highligherOpacity = "0.1";
     inputNumber.background = "white";
     inputNumber.onTextChangedObservable.add((input) => {
            let x = parseInt(input._textWrapper._text);
@@ -309,6 +311,10 @@ function createLetsPlayButton() {
  }
 
 
+/**
+ * Creates the help button
+ * 
+ */
 function help() {
 
     var buttonHelp = BABYLON.GUI.Button.CreateSimpleButton("helpButton", "?");
@@ -331,6 +337,11 @@ function help() {
     return buttonHelp;
  }
 
+
+ /**
+  *  Creates the text of the help button
+  * 
+  */
 function textHelp() {
     var advancedTextureHelp = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("Help");
     var textblockHelp = new BABYLON.GUI.TextBlock();   
@@ -345,7 +356,10 @@ function textHelp() {
     return textblockHelp;
 }
 
-
+/**
+ *  Creates the button for the story time
+ *  
+ */
 function story() {
 
     var buttonStory = BABYLON.GUI.Button.CreateSimpleButton("StoryButton", "STORYTIME");
@@ -368,6 +382,11 @@ function story() {
     return buttonStory;
  }
 
+
+ /**
+  *  Creates the text for the storytime button
+  *  
+  */
 function textStory() {
     var advancedTextureStory = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("Story");
     var textblockStory = new BABYLON.GUI.TextBlock();   
@@ -383,8 +402,9 @@ function textStory() {
 
 
 
-
-
+/**
+ *  Creates the different buttons
+ */
 function START() {
     let start = startButtonCreate();
     helpButton = help();
@@ -542,7 +562,7 @@ function WinOrLose() {
     const nb = otherBallsMesh.length;
     var advancedTextureGameOver = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GAME OVER");
     textblock = new BABYLON.GUI.TextBlock();           
-    if (remainingBalls <= balls/2) {
+    if (remainingBalls == 0) {
         textblock.text = "Congrats : you win !";
         scene.assets.winGame.setVolume(0.6);
         scene.assets.winGame.play();
