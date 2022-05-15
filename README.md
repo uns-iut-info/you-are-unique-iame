@@ -12,3 +12,6 @@ Les combos vous font accélerer mais les balles noires sont des malus qui vous f
 ( Un petit conseil : pour éviter les ennemis mal placés, n'hésitez pas à faire sauter votre Superball ! 😉 )
 
 Vous pouvez rejouer au jeu autant de fois que vous le souhaitez. 
+
+
+![gifMovingBall](https://user-images.githubusercontent.com/91093212/168486625-e11a1041-09d9-422d-b451-affe1f145ea1.gif)
