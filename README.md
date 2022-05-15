@@ -31,6 +31,11 @@ LEVELS AND THEIR SPECIFICATIONS :
 - LEVEL 3 : it is the final stage. You will be fighting directly against the awful megaball ! You must throw at him as many balls as possible to exhaust him (by pressing enter). Beware, for each collision with megaball, you will lose a life point !
 - As you have a limited amount of time to finish the level, there are teleportation gates that will help you seek for balls in distress faster ! There are also bonuses that will give you a lifepoint when there is a collision with yout ball !
 
+## BUGS 
+- Sometimes the scene isn't loaded properly so there's a dark blue screen. After many attempts to solve this problem we have not found a solution. Thus, you need to refresh the page until the scene is loaded properly.
+- Also, as the scene isn't always loaded properly, we advice you to wait a few second before to start a level. Indeed, sometimes some balls are going though the ground. 
+- Finally, note that after touching a black enemy, it is sometimes not possible to eat one of the colored balls. In this case, you should try to eat the other balls to resolve this issue.  
+
 ## VIDEOS
 ### EATING A BALL 
 ![gifMovingBall](https://user-images.githubusercontent.com/91093212/168486625-e11a1041-09d9-422d-b451-affe1f145ea1.gif)
