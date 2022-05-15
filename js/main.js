@@ -13,7 +13,7 @@ let superball;
 let ground;
 let otherBallsMesh;
 let villainBallsMesh;
-let remainingBalls = 20;
+let remainingBalls = 50;
 let balls = remainingBalls;
 let touchedBalls = 0;
 let inputStates = {};
@@ -237,20 +237,13 @@ function createLetsPlayButton() {
     inputNumber.height = "40px";
     inputNumber.left = "0px";
 
-
-    //inputNumber.width = 0.2;
-    //inputNumber.maxWidth = 0.3;
-    //inputNumber.left = "-37.5%";
-    //inputNumber.top = "-44%";
-    //inputNumber.height = "40px";
     inputNumber.text = "Number of balls to save";
     inputNumber.color = "#0095B3";
-    // inputNumber.highligherOpacity = "0.1";
     inputNumber.background = "white";
     inputNumber.onTextChangedObservable.add((input) => {
-        let x = parseInt(input._textWrapper._text);
+        let x = parseInt(input._textWrapper._text.toString(),10);
         if ((!isNaN(x)) && (x>0) && (x<remainingBalls)) {
-        remainingBalls = x
+        remainingBalls = x;
         textblock.text = "Remaining balls : " + remainingBalls;
         }
             
@@ -299,7 +292,7 @@ function createLetsPlayButton() {
     var buttonStart = BABYLON.GUI.Button.CreateSimpleButton("startButton", "CHOOSE LEVEL");
     buttonStart.width = "150px"
     buttonStart.height = "40px";
-    buttonStart.left = "-200px";
+    buttonStart.left = "0px";
     buttonStart.color = "white";
     buttonStart.cornerRadius = 20;
     buttonStart.background = "pink";
@@ -318,7 +311,7 @@ function help() {
     var buttonHelp = BABYLON.GUI.Button.CreateSimpleButton("helpButton", "?");
     buttonHelp.width = "40px"
     buttonHelp.height = "40px";
-    buttonHelp.left = "-600px";
+    buttonHelp.left = "-400px";
     buttonHelp.color = "white";
     buttonHelp.cornerRadius = 20;
     buttonHelp.background = "green";
@@ -340,8 +333,8 @@ function textHelp() {
     textblockHelp.text = 
     "KEYS :\n➡️ : moves the player to the right \n⬅️ : moves the player to the left \n⬇️ : moves the player backwards \n⬆️ : moves the player forward \n" +
     "space : makes the player jump\n enter : makes the player shoot balls (only in level 3)" 
-    textblockHelp.fontSize = 37;
-    textblockHelp.top = 250 ;
+    textblockHelp.fontSize = 17;
+    textblockHelp.top = 230 ;
     textblockHelp.left = 0;
     textblockHelp.color = "black";
     advancedTextureHelp.addControl(textblockHelp);
