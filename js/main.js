@@ -4,6 +4,7 @@ import FollowEnemy from "./FollowEnemy.js";
 import FinalBoss from "./FinalBoss.js";
 
 let spheresMesh;
+let button4;
 let canvas;
 let engine;
 let scene;
@@ -33,6 +34,11 @@ let enemy = null;
 let bonus1;
 let bonus2;
 let bonus3; 
+let healthPercentage;
+let counterBoss;
+var textblockHealth;
+var bossTouched = false;
+let time = 90;
 
 
 window.onload = startGame();
@@ -47,7 +53,8 @@ function startGame() {
     modifySettings();
 
     superball = scene.getMeshByName("heroSuperball");
-    startButton = createButtonLetsPlay();
+    //startButton = createButtonLetsPlay();
+    START();
     let finalScreen = false;
 
     engine.runRenderLoop(() => {
@@ -97,8 +104,10 @@ function startGame() {
     
 }
 
-function moveBalls() {
 
+
+function moveBalls() {
+    if(level!=3){
     for (let i = 0; i < villainBallsMesh.length; i++) {
         let villain =  villainBallsMesh[i];
 
@@ -144,6 +153,29 @@ function moveBalls() {
             }
         }
     }
+  }
+    else{
+        let boss = scene.getMeshByName("finalBoss");
+        let imposter = boss.physicsImpostor;
+        console.log("here");
+        if(rand()){
+            if(rand()){
+                imposter.applyImpulse(new BABYLON.Vector3(60, 0 , 0),boss.getAbsolutePosition()); 
+            }
+            else{
+                imposter.applyImpulse(new BABYLON.Vector3(-60, 0 , 0),boss.getAbsolutePosition()); 
+            }
+        }
+        else{
+            if(rand()){
+                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  60),boss.getAbsolutePosition()); 
+            }
+            else{
+                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  -60),boss.getAbsolutePosition()); 
+            }
+        }
+
+    }
 }
 
 function rand(){
@@ -164,9 +196,7 @@ function erase() {
     lifeHearts = 5;
 }
 
-function createButtonLetsPlay() {
-
-    
+function createLetsPlayButton() {
     var button0 = BABYLON.GUI.Button.CreateSimpleButton("but0", "LET'S PLAY !");
     button0.width = "150px"
     button0.height = "40px";
@@ -176,9 +206,129 @@ function createButtonLetsPlay() {
     button0.onPointerUpObservable.add(function() {
         button0.dispose();
         bool = true;
-        createTimer(90); 
+        createTimer(time); 
     });
     advancedTexture.addControl(button0);
+ }
+
+ function createinputRemainingBallsButton() {
+    
+    /*INPUT*/ 
+    var inputNumber = new BABYLON.GUI.InputText("inputNumber");
+
+    inputNumber.width = "150px"
+    inputNumber.height = "40px";
+    inputNumber.left = "0px";
+
+
+    //inputNumber.width = 0.2;
+    //inputNumber.maxWidth = 0.3;
+    //inputNumber.left = "-37.5%";
+    //inputNumber.top = "-44%";
+    //inputNumber.height = "40px";
+    inputNumber.text = "Number of balls to save";
+    inputNumber.color = "#0095B3";
+    // inputNumber.highligherOpacity = "0.1";
+    inputNumber.background = "white";
+    inputNumber.onTextChangedObservable.add((input) => {
+        let x = parseInt(input._textWrapper._text);
+        if ((!isNaN(x)) && (x>0) && (x<remainingBalls)) {
+        remainingBalls = x
+        textblock.text = "Remaining balls : " + remainingBalls;
+        }
+            
+    });
+    advancedTexture.addControl(inputNumber);
+    return inputNumber;
+
+ }
+
+ function createinputTimeButton() {
+    
+    var inputNumber = new BABYLON.GUI.InputText("inputTime");
+
+    inputNumber.width = "150px"
+    inputNumber.height = "40px";
+    inputNumber.left = "200px";
+
+
+    //inputNumber.width = 0.2;
+    //inputNumber.maxWidth = 0.3;
+    //inputNumber.left = "-37.5%";
+    //inputNumber.top = "-44%";
+    //inputNumber.height = "40px";
+    inputNumber.text = "Set Timer in sec";
+    inputNumber.color = "#0095B3";
+    // inputNumber.highligherOpacity = "0.1";
+    inputNumber.background = "white";
+    inputNumber.onTextChangedObservable.add((input) => {
+           let x = parseInt(input._textWrapper._text);
+           if ((!isNaN(x)) && (x>0)) {
+            time = x
+            console.log(time);
+            }
+    });
+    advancedTexture.addControl(inputNumber);
+    return inputNumber;
+ }
+
+
+ function startButtonCreate() {
+    var buttonStart = BABYLON.GUI.Button.CreateSimpleButton("startButton", "CHOOSE LEVEL");
+    buttonStart.width = "150px"
+    buttonStart.height = "40px";
+    buttonStart.left = "-200px";
+    buttonStart.color = "white";
+    buttonStart.cornerRadius = 20;
+    buttonStart.background = "pink";
+    buttonStart.onPointerUpObservable.add(function() {
+        buttonStart.dispose();
+        button4.dispose();
+        createButtonLetsPlay()    
+    });
+    advancedTexture.addControl(buttonStart);
+    return buttonStart;
+ }
+
+function START() {
+    let start = startButtonCreate();
+
+
+    button4 = BABYLON.GUI.Button.CreateSimpleButton("but4", "settings");
+    button4.width = "150px"
+    button4.height = "40px";
+    button4.left = "400px";
+    button4.color = "white";
+    button4.cornerRadius = 20;
+    button4.background = "red";
+    button4.onPointerUpObservable.add(function() 
+    { 
+        start.dispose()
+        let inputButton1 = createinputRemainingBallsButton();
+        let inputButton2 = createinputTimeButton();
+
+        button4.dispose();
+
+        var buttonConfirm = BABYLON.GUI.Button.CreateSimpleButton("confirmButton", "confirm");
+        buttonConfirm.width = "150px"
+        buttonConfirm.height = "40px";
+        buttonConfirm.left = "400px";
+        buttonConfirm.color = "white";
+        buttonConfirm.cornerRadius = 20;
+        buttonConfirm.background = "red";
+        buttonConfirm.onPointerUpObservable.add(function() 
+        { 
+            inputButton1.dispose();
+            inputButton2.dispose();
+            buttonConfirm.dispose();
+            startButtonCreate();
+        });     
+        advancedTexture.addControl(buttonConfirm);
+    });
+    advancedTexture.addControl(button4);
+}
+
+function createButtonLetsPlay() {
 
     var button1 = BABYLON.GUI.Button.CreateSimpleButton("but1", "level 1");
     button1.width = "150px"
@@ -193,7 +343,8 @@ function createButtonLetsPlay() {
         button2.dispose();
         button3.dispose();
         bonus2.dispose();
-        bonus3.dispose();
+        bonus3.dispose();        
+        createLetsPlayButton();
     });
     advancedTexture.addControl(button1);
 
@@ -218,10 +369,13 @@ function createButtonLetsPlay() {
         door1.position.y = 13;
         door2.position.y = 13;
         enemy = new FollowEnemy(BABYLON.MeshBuilder.CreateBox("enemyBox", {height: 5, width:5, depth: 5}, scene),1,1,1,scene);
+    
+        createLetsPlayButton();
+
     });
     advancedTexture.addControl(button2);
 
-    var button3 = BABYLON.GUI.Button.CreateSimpleButton("but3", "level 3");
+   var button3 = BABYLON.GUI.Button.CreateSimpleButton("but3", "level 3");
     button3.width = "150px"
     button3.height = "40px";
     button3.left = "200px";
@@ -233,6 +387,7 @@ function createButtonLetsPlay() {
         button1.dispose();
         button2.dispose();
         button3.dispose(); 
+        textblock.dispose();
         bonus1.position.x = Math.floor(Math.random()*(180-(-180)+1)+(-180));
         bonus1.position.z = Math.floor(Math.random()*(180-(-180)+1)+(-180));
         bonus1.position.y = 4;      
@@ -248,13 +403,32 @@ function createButtonLetsPlay() {
         ground = createGround( 'images/hmap1.png', "images/sol/sol10.jpg", 50, scene);
         let finalBoss = BABYLON.MeshBuilder.CreateSphere("finalBoss", {diameter: 50, segments: 64}, scene);
         let finalBossMesh = new FinalBoss(finalBoss,100,10,scene, "images/spheres/snow.jpg");
-        
+        healthPercentage = 100;
+        counterBoss = 0;
         door1.position.y = 13;
         door2.position.y = 13;
+
+        var advancedTextureHealth = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("Health");
+        textblockHealth = new BABYLON.GUI.TextBlock();   
+        textblockHealth.text = "■■■■■■■■■■ 100 % "
+        textblockHealth.fontSize = 37;
+        textblockHealth.top = (screenHeight * 250)/720;
+        textblockHealth.left = 0;
+        textblockHealth.color = "green";
+        advancedTextureHealth.addControl(textblockHealth);
+
+        createLetsPlayButton();
+
+
     });
     advancedTexture.addControl(button3);
+
+
+
     return button1;
 }
+
+
 
 function WinOrLose() {
     const nb = otherBallsMesh.length;
@@ -323,10 +497,11 @@ function createTimer(i) { // i seconds
                 textBlock.dispose();
                 advancedTexture.dispose();
             }
-            if(i%5==0){
-                if(level!=3){
+            if((i%5==0)&&(level!=3)){
                 moveBalls();
-                }
+            }
+            if((i%3==0)&&(level==3)){
+                moveBalls();
             }
         }
     }, 1000)
@@ -412,6 +587,10 @@ function createHeartBonus(scene){
 	hl.addMesh(bonus2, BABYLON.Color3.Red());
     hl.addMesh(bonus3, BABYLON.Color3.Red());
 
+    bonus1.touched = false;
+    bonus2.touched = false;
+    bonus3.touched = false;
+
 }
 
 function createTeleportation(scene){
@@ -491,6 +670,79 @@ function loadSounds(scene) {
       binaryTask.onSuccess = function (task) {
         scene.assets.teleportation = new BABYLON.Sound(
           "teleportation",
+          task.data,
+          scene,
+          null,
+          {
+              loop: false,
+              spatialSound: true,
+              autoplay: false
+          }
+        );
+      };
+
+    binaryTask = assetsManager.addBinaryFileTask(
+        "bonus",
+        "sounds/bonus.wav"
+      );
+      binaryTask.onSuccess = function (task) {
+        scene.assets.bonus = new BABYLON.Sound(
+          "bonus",
+          task.data,
+          scene,
+          null,
+          {
+              loop: false,
+              spatialSound: true,
+              autoplay: false
+          }
+        );
+      };
+
+    binaryTask = assetsManager.addBinaryFileTask(
+        "enemy2",
+        "sounds/enemy2.wav"
+      );
+      binaryTask.onSuccess = function (task) {
+        scene.assets.enemy2 = new BABYLON.Sound(
+          "enemy2",
+          task.data,
+          scene,
+          null,
+          {
+              loop: false,
+              spatialSound: true,
+              autoplay: false
+          }
+        );
+      };
+
+    
+      binaryTask = assetsManager.addBinaryFileTask(
+        "finalboss",
+        "sounds/finalboss.wav"
+      );
+      binaryTask.onSuccess = function (task) {
+        scene.assets.finalboss = new BABYLON.Sound(
+          "finalboss",
+          task.data,
+          scene,
+          null,
+          {
+              loop: false,
+              spatialSound: true,
+              autoplay: false
+          }
+        );
+      };
+
+      binaryTask = assetsManager.addBinaryFileTask(
+        "canon",
+        "sounds/canon.wav"
+      );
+      binaryTask.onSuccess = function (task) {
+        scene.assets.canon = new BABYLON.Sound(
+          "canon",
           task.data,
           scene,
           null,
@@ -865,7 +1117,7 @@ function createSuperBall(scene) {
 
 
     superballMesh.canFireCannonBalls = true;
-    superballMesh.fireCannonBallsAfter = 0.1; // in seconds
+    superballMesh.fireCannonBallsAfter = 0.2; // in seconds
 
     superballMesh.fireCannonBalls = () => {
         if(!inputStates.enter) return;
@@ -924,15 +1176,40 @@ function createSuperBall(scene) {
         cannonball.actionManager = new BABYLON.ActionManager(scene);
         let boss = scene.getMeshByName("finalBoss");
 
+
+
         cannonball.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
             {trigger : BABYLON.ActionManager.OnIntersectionEnterTrigger,
             parameter : boss}, 
                                             
             () => {
-                //console.log("here");
                 cannonball.dispose(); 
-                boss.scaling = new BABYLON.Vector3(boss.scaling.x-0.02,boss.scaling.y-0.02,boss.scaling.z-0.02);
-
+                scene.assets.canon.setPosition(superballMesh.position);
+                scene.assets.canon.setVolume(2);
+                scene.assets.canon.play();
+                //console.log("here");
+                counterBoss++; 
+                if(counterBoss%10==0){ // update of the health bar
+                    healthPercentage = healthPercentage - 10;
+                    let string = "■■■■■■■■■■";
+                    textblockHealth.text = string.substring(0,healthPercentage/10) + " " + healthPercentage + "%";
+                    if(healthPercentage<=70 && healthPercentage>=40){
+                        textblockHealth.color = "orange";
+                    }
+                    if(healthPercentage<40){
+                        textblockHealth.color = "red";
+                    }
+                }
+               
+                if(healthPercentage==0){ // the player wins
+                    boss.material = cannonball.material;
+                    remainingBalls = 0;
+                    textblockHealth.dispose();
+                }
+                else{
+                    boss.material = cannonball.material;
+                    boss.material.diffuseTexture = new BABYLON.Texture("images/spheres/snow.jpg", scene); 
+                }
             }
         ));
 
@@ -1081,6 +1358,10 @@ if (level != 3) {
 if (level == 2) {
     let enemyBox = scene.getMeshByName("enemyBox")
     if  (player.intersectsMesh(enemyBox)) {
+        scene.assets.enemy2.setPosition(player.position);
+        scene.assets.enemy2.setVolume(2);
+        scene.assets.enemy2.play();
+
         enemyBox.position.x = Math.floor(Math.random()*(300-(-300)+1)+(-300));
         enemyBox.position.z = Math.floor(Math.random()*(300-(-300)+1)+(-300));
         if (touchedBalls > 0) {
@@ -1098,37 +1379,86 @@ if (level == 2) {
 
 }
 
+if (level==3){
+    let boss = scene.getMeshByName("finalBoss");
+    if(player.intersectsMesh(boss)){
+        if(!bossTouched){
+        
+        scene.assets.finalboss.setPosition(player.position);
+        scene.assets.finalboss.setVolume(2);
+        scene.assets.finalboss.play();
+    
+        lifeHearts--;
+        let string = "❤❤❤❤❤";
+        liveblock.text = string.substring(0,lifeHearts);
+        bossTouched = true;
+        
+        setTimeout(() => {
+            bossTouched = false;
+        }, 5000 );
+        }
+    }
+
+
+}
+
 
 
     /* DETECTION WITH A BONUS : */
 
     if(player.intersectsMesh(bonus1)){
-        bonus1.dispose();
-        if(lifeHearts!=5){
-            lifeHearts++;
-            let string = "❤❤❤❤❤";
-            liveblock.text = string.substring(0,lifeHearts);
+        if(!bonus1.touched){
+            bonus1.dispose();
+
+            scene.assets.bonus.setPosition(player.position);
+            scene.assets.bonus.setVolume(1.5);
+            scene.assets.bonus.play();
+
+            if(lifeHearts!=5){
+                console.log(lifeHearts);
+                lifeHearts++;
+                let string = "❤❤❤❤❤";
+                liveblock.text = string.substring(0,lifeHearts);
+            }
+            bonus1.touched = true;
         }
     }
 
     if(player.intersectsMesh(bonus2)){
-        bonus2.dispose();
+        if(!bonus2.touched){
+            bonus2.dispose();
 
-        if(lifeHearts!=5){
-            lifeHearts++;
-            let string = "❤❤❤❤❤";
-            liveblock.text = string.substring(0,lifeHearts);
-        }
+            scene.assets.bonus.setPosition(player.position);
+            scene.assets.bonus.setVolume(1.5);
+            scene.assets.bonus.play();
+
+            if(lifeHearts!=5){
+                console.log(lifeHearts);
+                lifeHearts++;
+                let string = "❤❤❤❤❤";
+                liveblock.text = string.substring(0,lifeHearts);
+            }
+            bonus2.touched = true;
+      }
     }
     
     if(player.intersectsMesh(bonus3)){
-        bonus3.dispose();
-        if(lifeHearts!=5){
-            lifeHearts++;
-            let string = "❤❤❤❤❤";
-            liveblock.text = string.substring(0,lifeHearts);
+        if(!bonus3.touched){
+            bonus3.dispose();
+
+            scene.assets.bonus.setPosition(player.position);
+            scene.assets.bonus.setVolume(1.5);
+            scene.assets.bonus.play();
+
+            if(lifeHearts!=5){
+                console.log(lifeHearts);
+                lifeHearts++;
+                let string = "❤❤❤❤❤";
+                liveblock.text = string.substring(0,lifeHearts);
+            }
+            bonus3.touched = true;
         }
-    }
+  }
 }
 
 
