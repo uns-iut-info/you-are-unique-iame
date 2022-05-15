@@ -160,18 +160,18 @@ function moveBalls() {
         console.log("here");
         if(rand()){
             if(rand()){
-                imposter.applyImpulse(new BABYLON.Vector3(70, 0 , 0),boss.getAbsolutePosition()); 
+                imposter.applyImpulse(new BABYLON.Vector3(60, 0 , 0),boss.getAbsolutePosition()); 
             }
             else{
-                imposter.applyImpulse(new BABYLON.Vector3(-70, 0 , 0),boss.getAbsolutePosition()); 
+                imposter.applyImpulse(new BABYLON.Vector3(-60, 0 , 0),boss.getAbsolutePosition()); 
             }
         }
         else{
             if(rand()){
-                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  70),boss.getAbsolutePosition()); 
+                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  60),boss.getAbsolutePosition()); 
             }
             else{
-                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  -70),boss.getAbsolutePosition()); 
+                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  -60),boss.getAbsolutePosition()); 
             }
         }
 
@@ -387,6 +387,7 @@ function createButtonLetsPlay() {
         button1.dispose();
         button2.dispose();
         button3.dispose(); 
+        textblock.dispose();
         bonus1.position.x = Math.floor(Math.random()*(180-(-180)+1)+(-180));
         bonus1.position.z = Math.floor(Math.random()*(180-(-180)+1)+(-180));
         bonus1.position.y = 4;      
@@ -499,7 +500,7 @@ function createTimer(i) { // i seconds
             if((i%5==0)&&(level!=3)){
                 moveBalls();
             }
-            if((i%2==0)&&(level==3)){
+            if((i%3==0)&&(level==3)){
                 moveBalls();
             }
         }
@@ -1043,7 +1044,7 @@ function createSuperBall(scene) {
 
 
     superballMesh.canFireCannonBalls = true;
-    superballMesh.fireCannonBallsAfter = 0.1; // in seconds
+    superballMesh.fireCannonBallsAfter = 0.2; // in seconds
 
     superballMesh.fireCannonBalls = () => {
         if(!inputStates.enter) return;
@@ -1127,6 +1128,7 @@ function createSuperBall(scene) {
                 if(healthPercentage==0){ // the player wins
                     boss.material = cannonball.material;
                     remainingBalls = 0;
+                    textblockHealth.dispose();
                 }
                 else{
                     boss.material = cannonball.material;
