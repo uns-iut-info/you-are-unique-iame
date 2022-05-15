@@ -107,7 +107,7 @@ function startGame() {
 
 
 function moveBalls() {
-
+    if(level!=3){
     for (let i = 0; i < villainBallsMesh.length; i++) {
         let villain =  villainBallsMesh[i];
 
@@ -152,6 +152,29 @@ function moveBalls() {
                 imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  -0.1),ball.getAbsolutePosition()); 
             }
         }
+    }
+  }
+    else{
+        let boss = scene.getMeshByName("finalBoss");
+        let imposter = boss.physicsImpostor;
+        console.log("here");
+        if(rand()){
+            if(rand()){
+                imposter.applyImpulse(new BABYLON.Vector3(70, 0 , 0),boss.getAbsolutePosition()); 
+            }
+            else{
+                imposter.applyImpulse(new BABYLON.Vector3(-70, 0 , 0),boss.getAbsolutePosition()); 
+            }
+        }
+        else{
+            if(rand()){
+                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  70),boss.getAbsolutePosition()); 
+            }
+            else{
+                imposter.applyImpulse(new BABYLON.Vector3(0, 0 ,  -70),boss.getAbsolutePosition()); 
+            }
+        }
+
     }
 }
 
@@ -473,10 +496,11 @@ function createTimer(i) { // i seconds
                 textBlock.dispose();
                 advancedTexture.dispose();
             }
-            if(i%5==0){
-                if(level!=3){
+            if((i%5==0)&&(level!=3)){
                 moveBalls();
-                }
+            }
+            if((i%2==0)&&(level==3)){
+                moveBalls();
             }
         }
     }, 1000)
@@ -561,6 +585,10 @@ function createHeartBonus(scene){
 	hl.addMesh(bonus1, BABYLON.Color3.Red());
 	hl.addMesh(bonus2, BABYLON.Color3.Red());
     hl.addMesh(bonus3, BABYLON.Color3.Red());
+
+    bonus1.touched = false;
+    bonus2.touched = false;
+    bonus3.touched = false;
 
 }
 
@@ -1293,35 +1321,43 @@ if (level==3){
     /* DETECTION WITH A BONUS : */
 
     if(player.intersectsMesh(bonus1)){
-        bonus1.dispose();
-        if(lifeHearts!=5){
-            console.log(lifeHearts);
-            lifeHearts++;
-            let string = "❤❤❤❤❤";
-            liveblock.text = string.substring(0,lifeHearts);
+        if(!bonus1.touched){
+            bonus1.dispose();
+            if(lifeHearts!=5){
+                console.log(lifeHearts);
+                lifeHearts++;
+                let string = "❤❤❤❤❤";
+                liveblock.text = string.substring(0,lifeHearts);
+            }
+            bonus1.touched = true;
         }
     }
 
     if(player.intersectsMesh(bonus2)){
-        bonus2.dispose();
-
-        if(lifeHearts!=5){
-            console.log(lifeHearts);
-            lifeHearts++;
-            let string = "❤❤❤❤❤";
-            liveblock.text = string.substring(0,lifeHearts);
-        }
+        if(!bonus2.touched){
+            bonus2.dispose();
+            if(lifeHearts!=5){
+                console.log(lifeHearts);
+                lifeHearts++;
+                let string = "❤❤❤❤❤";
+                liveblock.text = string.substring(0,lifeHearts);
+            }
+            bonus2.touched = true;
+      }
     }
     
     if(player.intersectsMesh(bonus3)){
-        bonus3.dispose();
-        if(lifeHearts!=5){
-            console.log(lifeHearts);
-            lifeHearts++;
-            let string = "❤❤❤❤❤";
-            liveblock.text = string.substring(0,lifeHearts);
+        if(!bonus3.touched){
+            bonus3.dispose();
+            if(lifeHearts!=5){
+                console.log(lifeHearts);
+                lifeHearts++;
+                let string = "❤❤❤❤❤";
+                liveblock.text = string.substring(0,lifeHearts);
+            }
+            bonus3.touched = true;
         }
-    }
+  }
 }
 
 
