@@ -92,6 +92,7 @@ function startGame() {
 }
 
 function moveBalls() {
+    console.log("la"):
 
     for (let i = 0; i < villainBallsMesh.length; i++) {
         let villain =  villainBallsMesh[i];
