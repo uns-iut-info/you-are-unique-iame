@@ -317,7 +317,7 @@ function textHelp() {
     "KEYS :\n➡️ : moves the player to the right \n⬅️ : moves the player to the left \n⬇️ : moves the player backwards \n⬆️ : moves the player forward \n" +
     "space : makes the player jump\n enter : makes the player shoot balls (only in level 3)" 
     textblockHelp.fontSize = 37;
-    textblockHelp.top = 250it ;
+    textblockHelp.top = 250 ;
     textblockHelp.left = 0;
     textblockHelp.color = "black";
     advancedTextureHelp.addControl(textblockHelp);
