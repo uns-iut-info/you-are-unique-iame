@@ -8,7 +8,6 @@ export default class sphereMesh extends Sphere {
         super(sphereMesh,id,scaling,scene,texture);
         sphereMesh.position.x = 0;
         sphereMesh.position.z = 0;
-        sphereMesh.speed = 4;
         sphereMesh.frontVector = new BABYLON.Vector3(0, 0, 1);
 
 

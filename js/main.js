@@ -1166,7 +1166,7 @@ function createSuperBall(scene) {
     let superballMesh = new BABYLON.MeshBuilder.CreateSphere("heroSuperball", {diameter: 7, segments: 64}, scene);
     let superball = new SuperBall(superballMesh,1,0.2,scene, null);
 
-    superballMesh.speed = 1;
+    superballMesh.speed = 2;
     superballMesh.frontVector = new BABYLON.Vector3(0, 0, 1);
 
     superballMesh.move = () => {
@@ -1508,7 +1508,7 @@ if (level != 3) {
             let string = "❤❤❤❤❤";
             liveblock.text = string.substring(0,lifeHearts);
 
-            player.speed = 1;
+            player.speed = 2;
 
             setTimeout(() => {
                 ball.touched = false;
