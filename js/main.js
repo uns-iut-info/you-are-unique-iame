@@ -13,7 +13,8 @@ let superball;
 let ground;
 let otherBallsMesh;
 let villainBallsMesh;
-let remainingBalls = 50;
+let nbBallsInitial = 50;
+let remainingBalls = nbBallsInitial;
 let balls = remainingBalls;
 let touchedBalls = 0;
 let inputStates = {};
@@ -242,7 +243,7 @@ function createLetsPlayButton() {
     inputNumber.background = "white";
     inputNumber.onTextChangedObservable.add((input) => {
         let x = parseInt(input._textWrapper._text.toString(),10);
-        if ((!isNaN(x)) && (x>0) && (x<remainingBalls)) {
+        if ((!isNaN(x)) && (x>0) && (x<nbBallsInitial)) {
         remainingBalls = x;
         textblock.text = "Remaining balls : " + remainingBalls;
         }
