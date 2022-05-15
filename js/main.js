@@ -37,6 +37,7 @@ let healthPercentage;
 let counterBoss;
 var textblockHealth;
 var bossTouched = false;
+let time = 90;
 
 
 window.onload = startGame();
@@ -51,7 +52,8 @@ function startGame() {
     modifySettings();
 
     superball = scene.getMeshByName("heroSuperball");
-    startButton = createButtonLetsPlay();
+    //startButton = createButtonLetsPlay();
+    START();
     let finalScreen = false;
 
     engine.runRenderLoop(() => {
@@ -100,6 +102,8 @@ function startGame() {
 
     
 }
+
+
 
 function moveBalls() {
 
@@ -168,9 +172,7 @@ function erase() {
     lifeHearts = 5;
 }
 
-function createButtonLetsPlay() {
-
-    
+function createLetsPlayButton() {
     var button0 = BABYLON.GUI.Button.CreateSimpleButton("but0", "LET'S PLAY !");
     button0.width = "150px"
     button0.height = "40px";
@@ -180,9 +182,128 @@ function createButtonLetsPlay() {
     button0.onPointerUpObservable.add(function() {
         button0.dispose();
         bool = true;
-        createTimer(90); 
+        createTimer(time); 
     });
     advancedTexture.addControl(button0);
+ }
+
+ function createinputRemainingBallsButton() {
+    
+    /*INPUT*/ 
+    var inputNumber = new BABYLON.GUI.InputText("inputNumber");
+
+    inputNumber.width = "150px"
+    inputNumber.height = "40px";
+    inputNumber.left = "0px";
+
+
+    //inputNumber.width = 0.2;
+    //inputNumber.maxWidth = 0.3;
+    //inputNumber.left = "-37.5%";
+    //inputNumber.top = "-44%";
+    //inputNumber.height = "40px";
+    inputNumber.text = "Number of balls to save";
+    inputNumber.color = "#0095B3";
+    // inputNumber.highligherOpacity = "0.1";
+    inputNumber.background = "white";
+    inputNumber.onTextChangedObservable.add((input) => {
+        let x = parseInt(input._textWrapper._text);
+        if ((!isNaN(x)) && (x>0) && (x<remainingBalls)) {
+        remainingBalls = x
+        textblock.text = "Remaining balls : " + remainingBalls;
+        }
+            
+    });
+    advancedTexture.addControl(inputNumber);
+    return inputNumber;
+
+ }
+
+ function createinputTimeButton() {
+    
+    var inputNumber = new BABYLON.GUI.InputText("inputTime");
+
+    inputNumber.width = "150px"
+    inputNumber.height = "40px";
+    inputNumber.left = "200px";
+
+
+    //inputNumber.width = 0.2;
+    //inputNumber.maxWidth = 0.3;
+    //inputNumber.left = "-37.5%";
+    //inputNumber.top = "-44%";
+    //inputNumber.height = "40px";
+    inputNumber.text = "Set Timer in sec";
+    inputNumber.color = "#0095B3";
+    // inputNumber.highligherOpacity = "0.1";
+    inputNumber.background = "white";
+    inputNumber.onTextChangedObservable.add((input) => {
+           let x = parseInt(input._textWrapper._text);
+           if ((!isNaN(x)) && (x>0)) {
+            time = x
+            console.log(time);
+            }
+    });
+    advancedTexture.addControl(inputNumber);
+    return inputNumber;
+ }
+
+
+ function startButtonCreate() {
+    var buttonStart = BABYLON.GUI.Button.CreateSimpleButton("startButton", "CHOOSE LEVEL");
+    buttonStart.width = "150px"
+    buttonStart.height = "40px";
+    buttonStart.left = "-200px";
+    buttonStart.color = "white";
+    buttonStart.cornerRadius = 20;
+    buttonStart.background = "pink";
+    buttonStart.onPointerUpObservable.add(function() {
+        buttonStart.dispose();
+        createButtonLetsPlay()    
+    });
+    advancedTexture.addControl(buttonStart);
+    return buttonStart;
+ }
+
+function START() {
+    let start = startButtonCreate();
+
+
+    var button4 = BABYLON.GUI.Button.CreateSimpleButton("but4", "settings");
+    button4.width = "150px"
+    button4.height = "40px";
+    button4.left = "400px";
+    button4.color = "white";
+    button4.cornerRadius = 20;
+    button4.background = "red";
+    button4.onPointerUpObservable.add(function() 
+    { 
+        start.dispose()
+        let inputButton1 = createinputRemainingBallsButton();
+        let inputButton2 = createinputTimeButton();
+
+        button4.dispose();
+
+        var buttonConfirm = BABYLON.GUI.Button.CreateSimpleButton("confirmButton", "confirm");
+        buttonConfirm.width = "150px"
+        buttonConfirm.height = "40px";
+        buttonConfirm.left = "400px";
+        buttonConfirm.color = "white";
+        buttonConfirm.cornerRadius = 20;
+        buttonConfirm.background = "red";
+        buttonConfirm.onPointerUpObservable.add(function() 
+        { 
+            inputButton1.dispose();
+            inputButton2.dispose();
+            buttonConfirm.dispose();
+            startButtonCreate();
+        });     
+        advancedTexture.addControl(buttonConfirm);
+    });
+    advancedTexture.addControl(button4);
+}
+
+function createButtonLetsPlay() {
 
     var button1 = BABYLON.GUI.Button.CreateSimpleButton("but1", "level 1");
     button1.width = "150px"
@@ -197,7 +318,8 @@ function createButtonLetsPlay() {
         button2.dispose();
         button3.dispose();
         bonus2.dispose();
-        bonus3.dispose();
+        bonus3.dispose();        
+        createLetsPlayButton();
     });
     advancedTexture.addControl(button1);
 
@@ -222,6 +344,9 @@ function createButtonLetsPlay() {
         door1.position.y = 13;
         door2.position.y = 13;
         enemy = new FollowEnemy(BABYLON.MeshBuilder.CreateBox("enemyBox", {height: 5, width:5, depth: 5}, scene),1,1,1,scene);
+    
+        createLetsPlayButton();
+
     });
     advancedTexture.addControl(button2);
 
@@ -257,6 +382,7 @@ function createButtonLetsPlay() {
         door1.position.y = 13;
         door2.position.y = 13;
 
+D
         var advancedTextureHealth = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("Health");
         textblockHealth = new BABYLON.GUI.TextBlock();   
         textblockHealth.text = "■■■■■■■■■■ 100 % "
@@ -266,10 +392,14 @@ function createButtonLetsPlay() {
         textblockHealth.color = "green";
         advancedTextureHealth.addControl(textblockHealth);
 
+        createLetsPlayButton();
 
 
     });
     advancedTexture.addControl(button3);
+
+
+
     return button1;
 }
 
