@@ -390,7 +390,7 @@ function story() {
 function textStory() {
     var advancedTextureStory = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("Story");
     var textblockStory = new BABYLON.GUI.TextBlock();   
-    textblockStory.text = "You live in the magnificent realm of Balland.\nSince childhood, you've always been laughed by the other ballizens !\nFor you are a very special being.\nContrary to your peers, you were born different. Unique.\nFor an unknow reason, some strange particles are emitted by your body and have been given you special abilities.\nYou used to be ashamed of your difference. But that was before. Before Megaball invided CityBall!\n Thanks to your special abilities, try to save the kidnapped ballizens and defeat the awful Megaball !\n Hurry ! Everyone's counting on you Superball !" 
+    textblockStory.text = "You live in the magnificent realm of Balland.\nSince childhood, you've always been laughed by the other ballizens !\nFor you are a very special being.\nContrary to your peers, you were born different. Unique.\nFor an unknown reason, some strange particles are emitted by your body and have been given you special abilities.\nYou used to be ashamed of your difference. But that was before. Before Megaball invaded CityBall!\n Thanks to your special abilities, try to save the kidnapped ballizens and defeat the awful Megaball !\n Hurry ! Everyone's counting on you Superball !" 
     textblockStory.fontSize = 17;
     textblockStory.top = 230 ;
     textblockStory.left = 0;
