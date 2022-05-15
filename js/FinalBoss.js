@@ -1,5 +1,8 @@
 import Sphere from "./Sphere.js";
 
+/**
+ *  Class for the final boss
+ */
 export default class FinalBoss extends Sphere {
     constructor(finalBossMesh, id, scaling, scene, texture){
         super(finalBossMesh,id,scaling,scene,texture);

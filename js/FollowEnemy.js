@@ -1,4 +1,6 @@
-
+/**
+ * Class for the square enemy
+ */
 export default class FollowEnemy {
         constructor(enemyMesh, id, speed, scaling, scene) {
             this.enemyMesh = enemyMesh;
