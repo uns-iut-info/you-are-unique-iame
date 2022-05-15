@@ -681,6 +681,79 @@ function loadSounds(scene) {
         );
       };
 
+    binaryTask = assetsManager.addBinaryFileTask(
+        "bonus",
+        "sounds/bonus.wav"
+      );
+      binaryTask.onSuccess = function (task) {
+        scene.assets.bonus = new BABYLON.Sound(
+          "bonus",
+          task.data,
+          scene,
+          null,
+          {
+              loop: false,
+              spatialSound: true,
+              autoplay: false
+          }
+        );
+      };
+
+    binaryTask = assetsManager.addBinaryFileTask(
+        "enemy2",
+        "sounds/enemy2.wav"
+      );
+      binaryTask.onSuccess = function (task) {
+        scene.assets.enemy2 = new BABYLON.Sound(
+          "enemy2",
+          task.data,
+          scene,
+          null,
+          {
+              loop: false,
+              spatialSound: true,
+              autoplay: false
+          }
+        );
+      };
+
+    
+      binaryTask = assetsManager.addBinaryFileTask(
+        "finalboss",
+        "sounds/finalboss.wav"
+      );
+      binaryTask.onSuccess = function (task) {
+        scene.assets.finalboss = new BABYLON.Sound(
+          "finalboss",
+          task.data,
+          scene,
+          null,
+          {
+              loop: false,
+              spatialSound: true,
+              autoplay: false
+          }
+        );
+      };
+
+      binaryTask = assetsManager.addBinaryFileTask(
+        "canon",
+        "sounds/canon.wav"
+      );
+      binaryTask.onSuccess = function (task) {
+        scene.assets.canon = new BABYLON.Sound(
+          "canon",
+          task.data,
+          scene,
+          null,
+          {
+              loop: false,
+              spatialSound: true,
+              autoplay: false
+          }
+        );
+      };
+
 
 
     binaryTask = assetsManager.addBinaryFileTask(
@@ -1111,6 +1184,9 @@ function createSuperBall(scene) {
                                             
             () => {
                 cannonball.dispose(); 
+                scene.assets.canon.setPosition(superballMesh.position);
+                scene.assets.canon.setVolume(2);
+                scene.assets.canon.play();
                 //console.log("here");
                 counterBoss++; 
                 if(counterBoss%10==0){ // update of the health bar
@@ -1282,6 +1358,10 @@ if (level != 3) {
 if (level == 2) {
     let enemyBox = scene.getMeshByName("enemyBox")
     if  (player.intersectsMesh(enemyBox)) {
+        scene.assets.enemy2.setPosition(player.position);
+        scene.assets.enemy2.setVolume(2);
+        scene.assets.enemy2.play();
+
         enemyBox.position.x = Math.floor(Math.random()*(300-(-300)+1)+(-300));
         enemyBox.position.z = Math.floor(Math.random()*(300-(-300)+1)+(-300));
         if (touchedBalls > 0) {
@@ -1303,6 +1383,10 @@ if (level==3){
     let boss = scene.getMeshByName("finalBoss");
     if(player.intersectsMesh(boss)){
         if(!bossTouched){
+        
+        scene.assets.finalboss.setPosition(player.position);
+        scene.assets.finalboss.setVolume(2);
+        scene.assets.finalboss.play();
     
         lifeHearts--;
         let string = "❤❤❤❤❤";
@@ -1325,6 +1409,11 @@ if (level==3){
     if(player.intersectsMesh(bonus1)){
         if(!bonus1.touched){
             bonus1.dispose();
+
+            scene.assets.bonus.setPosition(player.position);
+            scene.assets.bonus.setVolume(1.5);
+            scene.assets.bonus.play();
+
             if(lifeHearts!=5){
                 console.log(lifeHearts);
                 lifeHearts++;
@@ -1338,6 +1427,11 @@ if (level==3){
     if(player.intersectsMesh(bonus2)){
         if(!bonus2.touched){
             bonus2.dispose();
+
+            scene.assets.bonus.setPosition(player.position);
+            scene.assets.bonus.setVolume(1.5);
+            scene.assets.bonus.play();
+
             if(lifeHearts!=5){
                 console.log(lifeHearts);
                 lifeHearts++;
@@ -1351,6 +1445,11 @@ if (level==3){
     if(player.intersectsMesh(bonus3)){
         if(!bonus3.touched){
             bonus3.dispose();
+
+            scene.assets.bonus.setPosition(player.position);
+            scene.assets.bonus.setVolume(1.5);
+            scene.assets.bonus.play();
+
             if(lifeHearts!=5){
                 console.log(lifeHearts);
                 lifeHearts++;
